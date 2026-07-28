@@ -1,20 +1,19 @@
 #!/bin/bash
-
-# Exit codes: 0 playlist regenerated, 1 the grabber failed, 2 no stream could be
-# resolved at all (YouTube unreachable or rate limiting). The previous
-# youtube.m3u is left in place for anything other than 0.
-
 set -uo pipefail
 
 cd "$(dirname "$0")"
 
-python3 -m pip install requests
+python3 -m pip install --quiet --upgrade -r requirements.txt
 
+# Optional: export YOUTUBE_COOKIES=/path/to/cookies.txt (Netscape format) and/or
+# YTDLP_PROXY=http://host:port if YouTube blocks anonymous requests from your IP.
+# The playlist is written to a temp file first so a failed run leaves the
+# previous youtube.m3u in place instead of truncating it.
 tmp_out="$(mktemp)"
 trap 'rm -f "$tmp_out"' EXIT
 
 status=0
-python3 scripts/youtube_m3ugrabber.py > "$tmp_out" || status=$?
+(cd scripts/ && python3 youtube_m3ugrabber.py) > "$tmp_out" || status=$?
 
 if [ "$status" -ne 0 ]; then
     echo "m3u grab failed (exit $status), keeping the previous youtube.m3u" >&2

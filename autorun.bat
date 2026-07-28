@@ -1,12 +1,10 @@
 @echo off
 
-REM Exit codes: 0 playlist regenerated, 1 the grabber failed, 2 no stream could
-REM be resolved at all. The previous youtube.m3u is left in place unless 0.
-
 cd /d "%~dp0"
 
-pip install requests || exit /b 1
+python -m pip install --upgrade -r requirements.txt || exit /b 1
 
+REM Written to a temp file first so a failed run keeps the previous youtube.m3u.
 python scripts\youtube_m3ugrabber.py > youtube.m3u.tmp
 set status=%errorlevel%
 if not "%status%"=="0" (
