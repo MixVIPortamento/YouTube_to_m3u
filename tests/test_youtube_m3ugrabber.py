@@ -9,6 +9,7 @@ import youtube_m3ugrabber as grabber  # noqa: E402
 
 
 HLS_LINK = 'https://manifest.googlevideo.com/api/manifest/hls_playlist/index.m3u8'
+CHANNEL_URL = 'https://www.youtube.com/gazi/live'
 
 # grab() is stubbed out by the no_network fixture below, so keep the real one.
 hls_from_ytdlp = grabber.hls_from_ytdlp
@@ -160,6 +161,14 @@ class TestParseChannelLine:
         with pytest.raises(IndexError):
             grabber.parse_channel_line('Only Name | group')
 
+    def test_strips_quotes_and_newlines_from_fields(self):
+        line = ('Evil" ,x\n#EXTINF:-1, injected | g | https://logo.test/l.png | i')
+        extinf = grabber.parse_channel_line(line)
+        assert extinf.splitlines() == [extinf]
+        assert extinf.startswith('#EXTINF:-1 group-title="G" '
+                                 'tvg-logo="https://logo.test/l.png" tvg-id="i", ')
+        assert '"' not in extinf.split('tvg-id="i", ')[1]
+
 
 class TestHlsFromHtml:
     def test_returns_link_from_page(self, monkeypatch):
@@ -200,17 +209,17 @@ class TestGrab:
 
         monkeypatch.setattr(grabber, 'hls_from_ytdlp', lambda url: HLS_LINK)
         monkeypatch.setattr(grabber, 'hls_from_html', boom)
-        assert grabber.grab('https://youtube.test/live') is True
+        assert grabber.grab(CHANNEL_URL) is True
         assert capsys.readouterr().out.strip() == HLS_LINK
 
     def test_falls_back_to_html_scrape(self, monkeypatch, capsys):
         monkeypatch.setattr(grabber, 'hls_from_html', lambda url: HLS_LINK)
-        grabber.grab('https://youtube.test/live')
+        grabber.grab(CHANNEL_URL)
         assert capsys.readouterr().out.strip() == HLS_LINK
 
     def test_prints_not_available_when_both_paths_fail(self, monkeypatch, capsys):
         monkeypatch.setattr(grabber, 'hls_from_html', lambda url: None)
-        assert grabber.grab('https://youtube.test/live') is False
+        assert grabber.grab(CHANNEL_URL) is False
         assert capsys.readouterr().out.strip() == grabber.NOT_AVAILABLE_LINK
 
     def test_survives_request_exception(self, monkeypatch, capsys):
@@ -218,27 +227,56 @@ class TestGrab:
             raise grabber.requests.Timeout('too slow')
 
         monkeypatch.setattr(grabber, 'hls_from_html', raise_timeout)
-        grabber.grab('https://youtube.test/live')
+        grabber.grab(CHANNEL_URL)
         captured = capsys.readouterr()
         assert captured.out.strip() == grabber.NOT_AVAILABLE_LINK
         assert 'request failed' in captured.err
+
+    @pytest.mark.parametrize('url', [
+        'https://evil.test/live',
+        'https://www.youtube.com.evil.test/live',
+        'http://www.youtube.com/live',
+        'file:///etc/passwd',
+    ])
+    def test_refuses_urls_outside_youtube(self, monkeypatch, capsys, url):
+        def boom(_url):
+            raise AssertionError('untrusted url must not be fetched')
+
+        monkeypatch.setattr(grabber, 'hls_from_html', boom)
+        monkeypatch.setattr(grabber, 'hls_from_ytdlp', boom)
+        assert grabber.grab(url) is False
+        captured = capsys.readouterr()
+        assert captured.out.strip() == grabber.NOT_AVAILABLE_LINK
+        assert 'refusing to fetch' in captured.err
 
 
 class TestFetchWithCurl:
     def test_reads_output_file_written_by_curl(self, monkeypatch, tmp_path):
         temp_file = tmp_path / 'temp.txt'
-        commands = []
+        calls = []
 
-        def fake_system(cmd):
-            commands.append(cmd)
-            temp_file.write_text('line1\nline2\n')
-            return 0
+        def fake_run(argv, stdout, check):
+            calls.append(argv)
+            stdout.write(b'line1\nline2\n')
 
-        monkeypatch.setattr(grabber.os, 'system', fake_system)
-        assert grabber.fetch_with_curl('https://youtube.test/live',
+        monkeypatch.setattr(grabber.subprocess, 'run', fake_run)
+        assert grabber.fetch_with_curl('https://www.youtube.com/live',
                                        temp_file=str(temp_file)) == 'line1\nline2\n'
-        assert commands[0].startswith('curl -sL -A "Mozilla/5.0')
-        assert commands[0].endswith(f'"https://youtube.test/live" > {temp_file}')
+        assert calls[0][0] == 'curl'
+        assert calls[0][-1] == 'https://www.youtube.com/live'
+
+    def test_passes_url_without_a_shell(self, monkeypatch, tmp_path):
+        """A url from youtube_channel_info.txt must never reach a shell."""
+        def no_shell(cmd):
+            raise AssertionError('curl must not run through a shell')
+
+        calls = []
+        monkeypatch.setattr(grabber.os, 'system', no_shell)
+        monkeypatch.setattr(grabber.subprocess, 'run',
+                            lambda argv, stdout, check: calls.append(argv))
+        injected = 'https://www.youtube.com/live"; touch pwned; "'
+        grabber.fetch_with_curl(injected, temp_file=str(tmp_path / 'temp.txt'))
+        assert calls[0][-1] == injected
 
 
 class TestFetch:
@@ -260,20 +298,18 @@ class TestFetch:
 
 
 class TestCleanup:
-    def test_removes_temp_files_when_temp_exists(self, monkeypatch):
-        commands = []
-        monkeypatch.setattr(grabber.os, 'listdir', lambda: ['temp.txt', 'watch1'])
-        monkeypatch.setattr(grabber.os, 'system', lambda cmd: commands.append(cmd))
+    def test_removes_temp_files_when_temp_exists(self, monkeypatch, tmp_path):
+        for name in ['temp.txt', 'watch1', 'youtube.m3u']:
+            (tmp_path / name).write_text('x')
+        monkeypatch.chdir(tmp_path)
         grabber.cleanup()
-        assert commands == ['rm -f temp.txt', 'rm -f watch*']
+        assert sorted(os.listdir(tmp_path)) == ['youtube.m3u']
 
-    def test_does_nothing_when_temp_missing(self, monkeypatch):
-        def boom(cmd):
-            raise AssertionError('nothing should be removed')
-
-        monkeypatch.setattr(grabber.os, 'listdir', lambda: ['youtube.m3u'])
-        monkeypatch.setattr(grabber.os, 'system', boom)
+    def test_does_nothing_when_temp_missing(self, monkeypatch, tmp_path):
+        (tmp_path / 'watch1').write_text('x')
+        monkeypatch.chdir(tmp_path)
         grabber.cleanup()
+        assert os.listdir(tmp_path) == ['watch1']
 
 
 class TestMain:
@@ -283,7 +319,7 @@ class TestMain:
             '~~ DO NOT EDIT\n'
             '\n'
             'Gazi TV Live | bangla | https://logo.test/gtv.png | gazi.bd\n'
-            'https://youtube.test/gazi/live\n'
+            f'{CHANNEL_URL}\n'
         )
         monkeypatch.setattr(grabber, 'hls_from_ytdlp', lambda url: HLS_LINK)
         monkeypatch.setattr(grabber, 'cleanup', lambda: None)
@@ -308,7 +344,7 @@ class TestMain:
 
     def test_warns_when_nothing_resolved(self, monkeypatch, tmp_path, capsys):
         channel_file = tmp_path / 'channels.txt'
-        channel_file.write_text('A | g | l |\nhttps://youtube.test/a/live\n')
+        channel_file.write_text(f'A | g | l |\n{CHANNEL_URL}\n')
         monkeypatch.setattr(grabber, 'hls_from_html', lambda url: None)
         monkeypatch.setattr(grabber, 'cleanup', lambda: None)
 

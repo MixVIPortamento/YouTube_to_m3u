@@ -1,9 +1,12 @@
 #! /usr/bin/python3
 
+import glob
 import json
 import os
 import re
+import subprocess
 import sys
+from urllib.parse import urlparse
 
 import requests
 
@@ -34,6 +37,15 @@ CHANNEL_INFO_FILE = '../youtube_channel_info.txt'
 # through a proxy.
 COOKIES_ENV = 'YOUTUBE_COOKIES'
 PROXY_ENV = 'YTDLP_PROXY'
+
+# youtube_channel_info.txt is editable by anyone opening a pull request, so its
+# urls are untrusted input: only fetch https urls on a YouTube host.
+ALLOWED_HOSTS = frozenset({
+    'youtube.com',
+    'www.youtube.com',
+    'm.youtube.com',
+    'youtu.be',
+})
 
 BROWSER_HEADERS = {
     'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
@@ -103,10 +115,24 @@ def fetch(url):
     return requests.get(url, timeout=15, headers=BROWSER_HEADERS).text
 
 
+def is_allowed_url(url):
+    """True for https urls pointing at a YouTube host."""
+    try:
+        parsed = urlparse(url)
+    except ValueError:
+        return False
+    return parsed.scheme == 'https' and parsed.hostname in ALLOWED_HOSTS
+
+
 def fetch_with_curl(url, temp_file='temp.txt'):
-    os.system(f'curl -sL -A "{BROWSER_HEADERS["User-Agent"]}" "{url}" > {temp_file}')
+    with open(temp_file, 'wb') as out:
+        subprocess.run(
+            ['curl', '-sL', '-A', BROWSER_HEADERS['User-Agent'],
+             '--max-time', '20', url],
+            stdout=out, check=False,
+        )
     with open(temp_file) as f:
-        return ''.join(f.readlines())
+        return f.read()
 
 
 def extract_m3u8_link(response):
@@ -144,6 +170,10 @@ def hls_from_html(url):
 
 def grab(url):
     """Print the live .m3u8 link for a channel url; True when one was found."""
+    if not is_allowed_url(url):
+        print(f'# {url} -> refusing to fetch a non-YouTube url', file=sys.stderr)
+        print(NOT_AVAILABLE_LINK)
+        return False
     link = hls_from_ytdlp(url)
     if not link:
         try:
@@ -155,21 +185,27 @@ def grab(url):
     return bool(link)
 
 
+def sanitise_field(value):
+    """Drop quotes and newlines so an entry cannot forge extra m3u directives."""
+    return re.sub(r'[\r\n"]', '', value).strip()
+
+
 def parse_channel_line(line):
     """Parse a `name | group | logo | tvg-id` line into an #EXTINF line."""
-    parts = line.split('|')
-    ch_name = parts[0].strip()
-    grp_title = parts[1].strip().title()
-    tvg_logo = parts[2].strip()
-    tvg_id = parts[3].strip()
+    parts = [sanitise_field(part) for part in line.split('|')]
+    ch_name = parts[0]
+    grp_title = parts[1].title()
+    tvg_logo = parts[2]
+    tvg_id = parts[3]
     return (f'#EXTINF:-1 group-title="{grp_title}" tvg-logo="{tvg_logo}" '
             f'tvg-id="{tvg_id}", {ch_name}')
 
 
 def cleanup():
     if 'temp.txt' in os.listdir():
-        os.system('rm -f temp.txt')
-        os.system('rm -f watch*')
+        for path in ['temp.txt'] + glob.glob('watch*'):
+            if os.path.isfile(path):
+                os.remove(path)
 
 
 def main(channel_info_file=CHANNEL_INFO_FILE):
@@ -183,7 +219,11 @@ def main(channel_info_file=CHANNEL_INFO_FILE):
             if not line or line.startswith('~~'):
                 continue
             if not line.startswith('https:'):
-                print(f'\n{parse_channel_line(line)}')
+                try:
+                    print(f'\n{parse_channel_line(line)}')
+                except IndexError:
+                    print(f'# skipping malformed channel entry: {line!r}',
+                          file=sys.stderr)
             else:
                 total += 1
                 resolved += grab(line)
