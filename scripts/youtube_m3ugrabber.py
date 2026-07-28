@@ -1,8 +1,10 @@
 #! /usr/bin/python3
 
+import glob
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 
@@ -27,7 +29,8 @@ banner = r'''
 
 NOT_AVAILABLE_LINK = ('https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u'
                       '/main/assets/moose_na.m3u')
-CHANNEL_INFO_FILE = '../youtube_channel_info.txt'
+CHANNEL_INFO_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 '..', 'youtube_channel_info.txt')
 
 # YouTube blocks plain scraping from most datacenter IPs ("Sign in to confirm
 # you're not a bot"). Export cookies from a browser and point YOUTUBE_COOKIES
@@ -127,13 +130,31 @@ def hls_from_ytdlp(url):
 
 
 def fetch(url):
-    return requests.get(url, timeout=15, headers=BROWSER_HEADERS).text
+    response = requests.get(url, timeout=15, headers=BROWSER_HEADERS)
+    response.raise_for_status()
+    return response.text
 
 
 def fetch_with_curl(url, temp_file='temp.txt'):
-    os.system(f'curl -sL -A "{BROWSER_HEADERS["User-Agent"]}" "{url}" > {temp_file}')
-    with open(temp_file) as f:
-        return ''.join(f.readlines())
+    """Fetch url with curl; returns an empty body when curl fails."""
+    try:
+        result = subprocess.run(
+            ['curl', '-sSL', '--max-time', '20',
+             '-A', BROWSER_HEADERS['User-Agent'], url],
+            capture_output=True, text=True)
+    except OSError as exc:
+        print(f'# {url} -> could not run curl: {exc}', file=sys.stderr)
+        return ''
+    if result.returncode != 0:
+        print(f'# {url} -> curl exited {result.returncode}: {result.stderr.strip()}',
+              file=sys.stderr)
+        return ''
+    try:
+        with open(temp_file, 'w') as f:
+            f.write(result.stdout)
+    except OSError as exc:
+        print(f'# could not write {temp_file}: {exc}', file=sys.stderr)
+    return result.stdout
 
 
 def extract_m3u8_link(response):
@@ -183,20 +204,25 @@ def grab(url):
 
 
 def parse_channel_line(line):
-    """Parse a `name | group | logo | tvg-id` line into an #EXTINF line."""
-    parts = line.split('|')
-    ch_name = parts[0].strip()
-    grp_title = parts[1].strip().title()
-    tvg_logo = parts[2].strip()
-    tvg_id = parts[3].strip()
+    """Parse a `name | group | logo | tvg-id` line into an #EXTINF line, or None."""
+    parts = [part.strip() for part in line.split('|')]
+    if len(parts) < 4:
+        print(f'# skipping malformed channel line, expected '
+              f'"name | group | logo | tvg-id": {line}', file=sys.stderr)
+        return None
+    ch_name, grp_title, tvg_logo, tvg_id = parts[0], parts[1].title(), parts[2], parts[3]
     return (f'#EXTINF:-1 group-title="{grp_title}" tvg-logo="{tvg_logo}" '
             f'tvg-id="{tvg_id}", {ch_name}')
 
 
 def cleanup():
-    if 'temp.txt' in os.listdir():
-        os.system('rm -f temp.txt')
-        os.system('rm -f watch*')
+    for path in ['temp.txt'] + glob.glob('watch*'):
+        try:
+            os.remove(path)
+        except FileNotFoundError:
+            pass
+        except OSError as exc:
+            print(f'# could not remove {path}: {exc}', file=sys.stderr)
 
 
 def main(channel_info_file=CHANNEL_INFO_FILE):
@@ -204,17 +230,21 @@ def main(channel_info_file=CHANNEL_INFO_FILE):
     print('#EXTM3U x-tvg-url="https://github.com/botallen/epg/releases/download/latest/epg.xml"')
     print(banner)
     resolved = total = 0
-    with open(channel_info_file) as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith('~~'):
-                continue
-            if not line.startswith('https:'):
-                print(f'\n{parse_channel_line(line)}')
-            else:
-                total += 1
-                resolved += grab(line)
-    cleanup()
+    try:
+        with open(channel_info_file) as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('~~'):
+                    continue
+                if not line.startswith('https:'):
+                    extinf = parse_channel_line(line)
+                    if extinf:
+                        print(f'\n{extinf}')
+                else:
+                    total += 1
+                    resolved += grab(line)
+    finally:
+        cleanup()
     print(f'# resolved {resolved}/{total} channels', file=sys.stderr)
     if total and not resolved:
         print('# nothing resolved: YouTube is blocking these requests. Refresh the '
@@ -225,4 +255,9 @@ def main(channel_info_file=CHANNEL_INFO_FILE):
 
 if __name__ == '__main__':
     # Non-zero exit keeps CI from committing a playlist of placeholders.
-    sys.exit(0 if main() else 1)
+    try:
+        resolved_channels = main()
+    except OSError as exc:
+        print(f'# could not read {CHANNEL_INFO_FILE}: {exc}', file=sys.stderr)
+        sys.exit(1)
+    sys.exit(0 if resolved_channels else 1)

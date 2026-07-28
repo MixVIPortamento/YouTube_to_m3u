@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 
 import pytest
@@ -215,9 +216,9 @@ class TestParseChannelLine:
             'tvg-id="", Some News'
         )
 
-    def test_raises_on_missing_fields(self):
-        with pytest.raises(IndexError):
-            grabber.parse_channel_line('Only Name | group')
+    def test_skips_and_warns_on_missing_fields(self, capsys):
+        assert grabber.parse_channel_line('Only Name | group') is None
+        assert 'malformed channel line' in capsys.readouterr().err
 
 
 class TestHlsFromHtml:
@@ -284,20 +285,35 @@ class TestGrab:
 
 
 class TestFetchWithCurl:
-    def test_reads_output_file_written_by_curl(self, monkeypatch, tmp_path):
+    def test_returns_body_and_writes_temp_file(self, monkeypatch, tmp_path):
         temp_file = tmp_path / 'temp.txt'
-        commands = []
+        calls = []
 
-        def fake_system(cmd):
-            commands.append(cmd)
-            temp_file.write_text('line1\nline2\n')
-            return 0
+        def fake_run(argv, **kwargs):
+            calls.append(argv)
+            return subprocess.CompletedProcess(argv, 0, stdout='line1\nline2\n', stderr='')
 
-        monkeypatch.setattr(grabber.os, 'system', fake_system)
+        monkeypatch.setattr(grabber.subprocess, 'run', fake_run)
         assert grabber.fetch_with_curl('https://youtube.test/live',
                                        temp_file=str(temp_file)) == 'line1\nline2\n'
-        assert commands[0].startswith('curl -sL -A "Mozilla/5.0')
-        assert commands[0].endswith(f'"https://youtube.test/live" > {temp_file}')
+        assert calls[0][0] == 'curl' and calls[0][-1] == 'https://youtube.test/live'
+        assert temp_file.read_text() == 'line1\nline2\n'
+
+    def test_returns_empty_body_and_warns_when_curl_fails(self, monkeypatch, capsys):
+        def fake_run(argv, **kwargs):
+            return subprocess.CompletedProcess(argv, 6, stdout='', stderr='resolve failed')
+
+        monkeypatch.setattr(grabber.subprocess, 'run', fake_run)
+        assert grabber.fetch_with_curl('https://youtube.test/live') == ''
+        assert 'curl exited 6' in capsys.readouterr().err
+
+    def test_returns_empty_body_when_curl_is_missing(self, monkeypatch, capsys):
+        def fake_run(argv, **kwargs):
+            raise FileNotFoundError('curl')
+
+        monkeypatch.setattr(grabber.subprocess, 'run', fake_run)
+        assert grabber.fetch_with_curl('https://youtube.test/live') == ''
+        assert 'could not run curl' in capsys.readouterr().err
 
 
 class TestFetch:
@@ -306,6 +322,9 @@ class TestFetch:
 
         class Response:
             text = 'body'
+
+            def raise_for_status(self):
+                pass
 
         def fake_get(url, timeout, headers):
             captured.update(url=url, timeout=timeout, headers=headers)
@@ -317,22 +336,41 @@ class TestFetch:
         assert captured['timeout'] == 15
         assert captured['headers'] == grabber.BROWSER_HEADERS
 
+    def test_raises_on_error_status(self, monkeypatch):
+        class Response:
+            text = 'Too Many Requests'
+
+            def raise_for_status(self):
+                raise grabber.requests.HTTPError('429 Client Error')
+
+        monkeypatch.setattr(grabber.requests, 'get',
+                            lambda url, timeout, headers: Response())
+        with pytest.raises(grabber.requests.HTTPError):
+            grabber.fetch('https://youtube.test/live')
+
 
 class TestCleanup:
-    def test_removes_temp_files_when_temp_exists(self, monkeypatch):
-        commands = []
-        monkeypatch.setattr(grabber.os, 'listdir', lambda: ['temp.txt', 'watch1'])
-        monkeypatch.setattr(grabber.os, 'system', lambda cmd: commands.append(cmd))
+    def test_removes_temp_and_watch_files(self, monkeypatch, tmp_path):
+        monkeypatch.chdir(tmp_path)
+        for name in ['temp.txt', 'watch1', 'youtube.m3u']:
+            (tmp_path / name).write_text('x')
         grabber.cleanup()
-        assert commands == ['rm -f temp.txt', 'rm -f watch*']
+        assert sorted(os.listdir(tmp_path)) == ['youtube.m3u']
 
-    def test_does_nothing_when_temp_missing(self, monkeypatch):
-        def boom(cmd):
-            raise AssertionError('nothing should be removed')
-
-        monkeypatch.setattr(grabber.os, 'listdir', lambda: ['youtube.m3u'])
-        monkeypatch.setattr(grabber.os, 'system', boom)
+    def test_does_nothing_when_temp_files_missing(self, monkeypatch, tmp_path):
+        monkeypatch.chdir(tmp_path)
         grabber.cleanup()
+
+    def test_warns_when_a_file_cannot_be_removed(self, monkeypatch, tmp_path, capsys):
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / 'temp.txt').write_text('x')
+
+        def refuse(path):
+            raise PermissionError('read-only')
+
+        monkeypatch.setattr(grabber.os, 'remove', refuse)
+        grabber.cleanup()
+        assert 'could not remove temp.txt' in capsys.readouterr().err
 
 
 class TestMain:
