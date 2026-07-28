@@ -200,7 +200,7 @@ class TestGrab:
 
         monkeypatch.setattr(grabber, 'hls_from_ytdlp', lambda url: HLS_LINK)
         monkeypatch.setattr(grabber, 'hls_from_html', boom)
-        grabber.grab('https://youtube.test/live')
+        assert grabber.grab('https://youtube.test/live') is True
         assert capsys.readouterr().out.strip() == HLS_LINK
 
     def test_falls_back_to_html_scrape(self, monkeypatch, capsys):
@@ -210,7 +210,7 @@ class TestGrab:
 
     def test_prints_not_available_when_both_paths_fail(self, monkeypatch, capsys):
         monkeypatch.setattr(grabber, 'hls_from_html', lambda url: None)
-        grabber.grab('https://youtube.test/live')
+        assert grabber.grab('https://youtube.test/live') is False
         assert capsys.readouterr().out.strip() == grabber.NOT_AVAILABLE_LINK
 
     def test_survives_request_exception(self, monkeypatch, capsys):
@@ -288,7 +288,7 @@ class TestMain:
         monkeypatch.setattr(grabber, 'hls_from_ytdlp', lambda url: HLS_LINK)
         monkeypatch.setattr(grabber, 'cleanup', lambda: None)
 
-        grabber.main(str(channel_file))
+        assert grabber.main(str(channel_file)) == 1
 
         out = capsys.readouterr().out
         assert out.startswith('#EXTM3U x-tvg-url="https://github.com/botallen/epg/'
@@ -303,5 +303,17 @@ class TestMain:
         channel_file.write_text('')
         called = []
         monkeypatch.setattr(grabber, 'cleanup', lambda: called.append(True))
-        grabber.main(str(channel_file))
+        assert grabber.main(str(channel_file)) == 0
         assert called == [True]
+
+    def test_warns_when_nothing_resolved(self, monkeypatch, tmp_path, capsys):
+        channel_file = tmp_path / 'channels.txt'
+        channel_file.write_text('A | g | l |\nhttps://youtube.test/a/live\n')
+        monkeypatch.setattr(grabber, 'hls_from_html', lambda url: None)
+        monkeypatch.setattr(grabber, 'cleanup', lambda: None)
+
+        assert grabber.main(str(channel_file)) == 0
+
+        err = capsys.readouterr().err
+        assert '# resolved 0/1 channels' in err
+        assert grabber.COOKIES_ENV in err

@@ -24,7 +24,8 @@ banner = r'''
 #########################################################################
 '''
 
-NOT_AVAILABLE_LINK = 'https://raw.githubusercontent.com/benmoose39/YouTube_to_m3u/main/assets/moose_na.m3u'
+NOT_AVAILABLE_LINK = ('https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u'
+                      '/main/assets/moose_na.m3u')
 CHANNEL_INFO_FILE = '../youtube_channel_info.txt'
 
 # YouTube blocks plain scraping from most datacenter IPs ("Sign in to confirm
@@ -142,7 +143,7 @@ def hls_from_html(url):
 
 
 def grab(url):
-    """Print the live .m3u8 link for a YouTube channel url."""
+    """Print the live .m3u8 link for a channel url; True when one was found."""
     link = hls_from_ytdlp(url)
     if not link:
         try:
@@ -151,6 +152,7 @@ def grab(url):
             print(f'# {url} -> request failed: {exc}', file=sys.stderr)
             link = None
     print(link or NOT_AVAILABLE_LINK)
+    return bool(link)
 
 
 def parse_channel_line(line):
@@ -171,8 +173,10 @@ def cleanup():
 
 
 def main(channel_info_file=CHANNEL_INFO_FILE):
+    """Write the playlist to stdout; return the number of resolved channels."""
     print('#EXTM3U x-tvg-url="https://github.com/botallen/epg/releases/download/latest/epg.xml"')
     print(banner)
+    resolved = total = 0
     with open(channel_info_file) as f:
         for line in f:
             line = line.strip()
@@ -181,9 +185,17 @@ def main(channel_info_file=CHANNEL_INFO_FILE):
             if not line.startswith('https:'):
                 print(f'\n{parse_channel_line(line)}')
             else:
-                grab(line)
+                total += 1
+                resolved += grab(line)
     cleanup()
+    print(f'# resolved {resolved}/{total} channels', file=sys.stderr)
+    if total and not resolved:
+        print('# nothing resolved: YouTube is blocking these requests. Refresh the '
+              f'{COOKIES_ENV} cookies export, set {PROXY_ENV}, or install a JS runtime '
+              '(deno) so yt-dlp can solve the player challenge.', file=sys.stderr)
+    return resolved
 
 
 if __name__ == '__main__':
-    main()
+    # Non-zero exit keeps CI from committing a playlist of placeholders.
+    sys.exit(0 if main() else 1)

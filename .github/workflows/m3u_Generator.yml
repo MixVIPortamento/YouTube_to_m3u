@@ -45,18 +45,29 @@ jobs:
             echo "YOUTUBE_COOKIES=$RUNNER_TEMP/cookies.txt" >> "$GITHUB_ENV"
           fi
 
+      # autorun.sh reinstalls requirements.txt on every run, so yt-dlp always
+      # picks up its latest YouTube fixes. It exits non-zero when nothing
+      # resolved (usually expired cookies), which fails the run instead of
+      # committing a playlist full of placeholders.
       - name: Generate playlist
         env:
           YTDLP_PROXY: ${{ secrets.YTDLP_PROXY }}
         run: |
           chmod +x autorun.sh
-          ./autorun.sh
+          ./autorun.sh 2> generator.log || STATUS=$?
+          tail -40 generator.log
+          {
+            echo "### M3U generator"
+            grep '^# resolved' generator.log || echo 'no channels resolved'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit ${STATUS:-0}
 
       - name: Commit & push
         run: |
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
           git add youtube.m3u
+          rm -f generator.log
           git diff --staged --quiet && echo "no changes" && exit 0
           git commit -m "links are updated"
           git push origin HEAD:${GITHUB_REF_NAME}

@@ -1,9 +1,9 @@
 
 <h1 align="center"> YouTube_to_m3u </h1>
 
-[![M3U generator for YouTube](https://github.com/benmoose39/YouTube_to_m3u/actions/workflows/m3u_Generator.yml/badge.svg)](https://github.com/benmoose39/YouTube_to_m3u/actions/workflows/m3u_Generator.yml)
+[![M3U generator for YouTube](https://github.com/MixVIPortamento/YouTube_to_m3u/actions/workflows/m3u_Generator.yml/badge.svg)](https://github.com/MixVIPortamento/YouTube_to_m3u/actions/workflows/m3u_Generator.yml)
 
-`https://raw.githubusercontent.com/benmoose39/YouTube_to_m3u/main/youtube.m3u`
+`https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/youtube.m3u`
 
 Updated m3u links of YouTube live channels, **auto-updated every 3 hours**.
 
@@ -14,11 +14,13 @@ Edit `youtube_channel_info.txt` to add your favourite YouTube livestreams
 Create a pull request or connect: https://discord.gg/dmgYmAEdee
 
 ### Usage
-Paste this URL: `https://raw.githubusercontent.com/benmoose39/YouTube_to_m3u/main/youtube.m3u` to any player which supports M3U playlists
+Paste this URL: `https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/youtube.m3u` to any player which supports M3U playlists
+
+Links carry a ~6 hour `expire` token, so always re-read the playlist rather than caching URLs.
 
 ### Run the tool on your local machine
 ``` bash
-git clone https://github.com/benmoose39/YouTube_to_m3u.git
+git clone https://github.com/MixVIPortamento/YouTube_to_m3u.git
 cd YouTube_to_m3u
 chmod +x autorun.sh
 ./autorun.sh
@@ -53,6 +55,23 @@ export YOUTUBE_COOKIES=~/cookies.txt   # exported from a signed-in browser
 ```
 
 Use a throwaway Google account for cookies — YouTube may flag accounts used for automation.
+
+### Keeping it working
+
+YouTube changes its player regularly, so the generator is built to fail loudly rather than
+quietly publish placeholders:
+
+* `autorun.sh` reinstalls `requirements.txt` on every run, so **yt-dlp is always upgraded** to the
+  version that knows about YouTube's latest changes — this is what keeps the script working
+  across years without code edits.
+* Every run prints `# resolved <n>/<total> channels` to stderr (also shown in the Action's run
+  summary), and exits non-zero when **nothing** resolved. The Action then fails instead of
+  committing an all-placeholder playlist, and GitHub emails you.
+* A failing run almost always means the `YOUTUBE_COOKIES` export has expired — re-export it and
+  update the secret. A residential `YTDLP_PROXY` avoids that maintenance.
+* Channels drift too: entries whose video is private/removed can never resolve and should be
+  deleted from `youtube_channel_info.txt`. Prefer channel URLs (`.../@handle/live`) over fixed
+  `watch?v=<id>` links, since a channel URL follows whatever stream is live now.
 
 ### Tests
 
