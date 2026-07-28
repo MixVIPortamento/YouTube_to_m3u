@@ -4,6 +4,7 @@ import json
 import os
 import re
 import sys
+import time
 
 import requests
 
@@ -35,6 +36,13 @@ CHANNEL_INFO_FILE = '../youtube_channel_info.txt'
 COOKIES_ENV = 'YOUTUBE_COOKIES'
 PROXY_ENV = 'YTDLP_PROXY'
 
+# Resolving a hundred channels back-to-back trips YouTube's rate limiting, which
+# surfaces as a bot check even on a signed-in session. Space the requests out and
+# retry those failures once the limiter has had a moment to relax.
+THROTTLE_MARKERS = ("confirm you're not a bot", 'confirm you\u2019re not a bot',
+                    'too many requests', 'http error 429')
+THROTTLE_RETRY_DELAYS = (5, 20)
+
 BROWSER_HEADERS = {
     'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
                    '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'),
@@ -64,6 +72,7 @@ def ytdlp_options():
         'skip_download': True,
         'noplaylist': True,
         'socket_timeout': 20,
+        'sleep_interval_requests': 1,
         # YouTube's player requires solving a JS challenge to expose formats;
         # needs a JS runtime (deno) plus yt-dlp's remote solver script.
         'remote_components': ['ejs:github'],
@@ -77,13 +86,31 @@ def ytdlp_options():
     return options
 
 
+def is_throttled(exc):
+    """True when yt-dlp failed because YouTube is rate limiting us, not the video."""
+    message = str(exc).lower()
+    return any(marker in message for marker in THROTTLE_MARKERS)
+
+
+def extract_info(url):
+    """Run yt-dlp against url, retrying while YouTube's rate limiter rejects us."""
+    for delay in THROTTLE_RETRY_DELAYS + (None,):
+        try:
+            with yt_dlp.YoutubeDL(ytdlp_options()) as ydl:
+                return ydl.extract_info(url, download=False)
+        except Exception as exc:
+            if delay is None or not is_throttled(exc):
+                raise
+            print(f'# {url} -> rate limited, retrying in {delay}s', file=sys.stderr)
+            time.sleep(delay)
+
+
 def hls_from_ytdlp(url):
     """Resolve the live HLS manifest with yt-dlp, or None if unavailable."""
     if yt_dlp is None:
         return None
     try:
-        with yt_dlp.YoutubeDL(ytdlp_options()) as ydl:
-            info = ydl.extract_info(url, download=False)
+        info = extract_info(url)
     except Exception as exc:
         print(f'# {url} -> yt-dlp failed: {exc}', file=sys.stderr)
         return None

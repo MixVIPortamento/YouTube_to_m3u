@@ -109,6 +109,65 @@ def fake_yt_dlp(monkeypatch):
     return install
 
 
+class FlakyYoutubeDL(FakeYoutubeDL):
+    """Raises `error` for the first `failures` calls, then returns `info`."""
+
+    def __init__(self, failures, error, info):
+        super().__init__(info=info, error=error)
+        self.failures = failures
+        self.calls = 0
+
+    def extract_info(self, url, download=False):
+        self.requested = (url, download)
+        self.calls += 1
+        if self.calls <= self.failures:
+            raise self.error
+        return self.info
+
+
+class TestThrottleHandling:
+    @pytest.mark.parametrize('message', [
+        "Sign in to confirm you're not a bot",
+        'Sign in to confirm you\u2019re not a bot',
+        'HTTP Error 429: Too Many Requests',
+    ])
+    def test_detects_rate_limiting(self, message):
+        assert grabber.is_throttled(RuntimeError(message)) is True
+
+    def test_ignores_unrelated_errors(self):
+        assert grabber.is_throttled(RuntimeError('Video unavailable')) is False
+
+    def test_retries_until_the_limiter_relaxes(self, monkeypatch, capsys):
+        fake = FlakyYoutubeDL(failures=2, info={'manifest_url': HLS_LINK},
+                              error=RuntimeError("Sign in to confirm you're not a bot"))
+        monkeypatch.setattr(grabber, 'yt_dlp', type('module', (), {'YoutubeDL': fake})())
+        slept = []
+        monkeypatch.setattr(grabber.time, 'sleep', slept.append)
+
+        assert hls_from_ytdlp('https://youtube.test/live') == HLS_LINK
+        assert fake.calls == 3
+        assert slept == list(grabber.THROTTLE_RETRY_DELAYS)
+        assert 'rate limited' in capsys.readouterr().err
+
+    def test_gives_up_after_the_last_retry(self, monkeypatch, capsys):
+        fake = FlakyYoutubeDL(failures=99, info=None,
+                              error=RuntimeError("Sign in to confirm you're not a bot"))
+        monkeypatch.setattr(grabber, 'yt_dlp', type('module', (), {'YoutubeDL': fake})())
+        monkeypatch.setattr(grabber.time, 'sleep', lambda seconds: None)
+
+        assert hls_from_ytdlp('https://youtube.test/live') is None
+        assert fake.calls == len(grabber.THROTTLE_RETRY_DELAYS) + 1
+        assert 'yt-dlp failed' in capsys.readouterr().err
+
+    def test_does_not_retry_other_failures(self, monkeypatch):
+        fake = FlakyYoutubeDL(failures=99, info=None, error=RuntimeError('Video unavailable'))
+        monkeypatch.setattr(grabber, 'yt_dlp', type('module', (), {'YoutubeDL': fake})())
+        monkeypatch.setattr(grabber.time, 'sleep', lambda seconds: pytest.fail('slept'))
+
+        assert hls_from_ytdlp('https://youtube.test/live') is None
+        assert fake.calls == 1
+
+
 class TestHlsFromYtdlp:
     def test_returns_none_when_yt_dlp_missing(self, monkeypatch):
         monkeypatch.setattr(grabber, 'yt_dlp', None)
