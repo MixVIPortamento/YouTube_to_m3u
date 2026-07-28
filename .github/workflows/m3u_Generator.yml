@@ -43,11 +43,13 @@ jobs:
           ./autorun.sh
 
       - name: git add
+        if: github.event_name != 'pull_request'
         run: |
           git add -A
           ls -la
 
       - name: commit & push
+        if: github.event_name != 'pull_request'
         run: |
           git commit -m "links are updated"
           git push
