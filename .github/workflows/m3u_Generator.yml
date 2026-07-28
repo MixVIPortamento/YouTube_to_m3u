@@ -42,12 +42,12 @@ jobs:
           chmod +x autorun.sh
           ./autorun.sh
 
-      - name: git add
-        run: |
-          git add -A
-          ls -la
-
       - name: commit & push
         run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "no link changes to commit"
+            exit 0
+          fi
           git commit -m "links are updated"
           git push

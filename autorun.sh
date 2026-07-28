@@ -1,11 +1,20 @@
 #!/bin/bash
 
-echo $(dirname $0)
+set -euo pipefail
+
+cd "$(dirname "$0")"
 
 python3 -m pip install requests
 
-cd $(dirname $0)/scripts/
+tmp_out="$(mktemp)"
+trap 'rm -f "$tmp_out"' EXIT
 
-python3 youtube_m3ugrabber.py > ../youtube.m3u
+if ! python3 scripts/youtube_m3ugrabber.py > "$tmp_out"; then
+    echo "m3u grab failed, keeping the previous youtube.m3u" >&2
+    exit 1
+fi
+
+mv "$tmp_out" youtube.m3u
+chmod 644 youtube.m3u
 
 echo m3u grabbed
