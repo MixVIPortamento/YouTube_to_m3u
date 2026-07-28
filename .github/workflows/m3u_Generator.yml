@@ -66,8 +66,19 @@ jobs:
         run: |
           git config user.email "action@github.com"
           git config user.name "GitHub Action"
-          git add youtube.m3u
           rm -f generator.log
-          git diff --staged --quiet && echo "no changes" && exit 0
-          git commit -m "links are updated"
-          git push origin HEAD:${GITHUB_REF_NAME}
+          cp youtube.m3u "$RUNNER_TEMP/youtube.m3u"
+          # The branch may have moved since checkout (another run, or a merge), so
+          # re-point at its tip and replay the freshly generated playlist on top;
+          # the file is regenerated wholesale, so the newest run always wins.
+          for attempt in 1 2 3; do
+            git fetch origin ${GITHUB_REF_NAME}
+            git reset --hard FETCH_HEAD
+            cp "$RUNNER_TEMP/youtube.m3u" youtube.m3u
+            git add youtube.m3u
+            git diff --staged --quiet && echo "no changes" && exit 0
+            git commit -m "links are updated"
+            git push origin HEAD:${GITHUB_REF_NAME} && exit 0
+            sleep 5
+          done
+          exit 1
