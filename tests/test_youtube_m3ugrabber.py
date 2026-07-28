@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 
 import pytest
@@ -110,6 +111,65 @@ def fake_yt_dlp(monkeypatch):
     return install
 
 
+class FlakyYoutubeDL(FakeYoutubeDL):
+    """Raises `error` for the first `failures` calls, then returns `info`."""
+
+    def __init__(self, failures, error, info):
+        super().__init__(info=info, error=error)
+        self.failures = failures
+        self.calls = 0
+
+    def extract_info(self, url, download=False):
+        self.requested = (url, download)
+        self.calls += 1
+        if self.calls <= self.failures:
+            raise self.error
+        return self.info
+
+
+class TestThrottleHandling:
+    @pytest.mark.parametrize('message', [
+        "Sign in to confirm you're not a bot",
+        'Sign in to confirm you\u2019re not a bot',
+        'HTTP Error 429: Too Many Requests',
+    ])
+    def test_detects_rate_limiting(self, message):
+        assert grabber.is_throttled(RuntimeError(message)) is True
+
+    def test_ignores_unrelated_errors(self):
+        assert grabber.is_throttled(RuntimeError('Video unavailable')) is False
+
+    def test_retries_until_the_limiter_relaxes(self, monkeypatch, capsys):
+        fake = FlakyYoutubeDL(failures=2, info={'manifest_url': HLS_LINK},
+                              error=RuntimeError("Sign in to confirm you're not a bot"))
+        monkeypatch.setattr(grabber, 'yt_dlp', type('module', (), {'YoutubeDL': fake})())
+        slept = []
+        monkeypatch.setattr(grabber.time, 'sleep', slept.append)
+
+        assert hls_from_ytdlp('https://youtube.test/live') == HLS_LINK
+        assert fake.calls == 3
+        assert slept == list(grabber.THROTTLE_RETRY_DELAYS)
+        assert 'rate limited' in capsys.readouterr().err
+
+    def test_gives_up_after_the_last_retry(self, monkeypatch, capsys):
+        fake = FlakyYoutubeDL(failures=99, info=None,
+                              error=RuntimeError("Sign in to confirm you're not a bot"))
+        monkeypatch.setattr(grabber, 'yt_dlp', type('module', (), {'YoutubeDL': fake})())
+        monkeypatch.setattr(grabber.time, 'sleep', lambda seconds: None)
+
+        assert hls_from_ytdlp('https://youtube.test/live') is None
+        assert fake.calls == len(grabber.THROTTLE_RETRY_DELAYS) + 1
+        assert 'yt-dlp failed' in capsys.readouterr().err
+
+    def test_does_not_retry_other_failures(self, monkeypatch):
+        fake = FlakyYoutubeDL(failures=99, info=None, error=RuntimeError('Video unavailable'))
+        monkeypatch.setattr(grabber, 'yt_dlp', type('module', (), {'YoutubeDL': fake})())
+        monkeypatch.setattr(grabber.time, 'sleep', lambda seconds: pytest.fail('slept'))
+
+        assert hls_from_ytdlp('https://youtube.test/live') is None
+        assert fake.calls == 1
+
+
 class TestHlsFromYtdlp:
     def test_returns_none_when_yt_dlp_missing(self, monkeypatch):
         monkeypatch.setattr(grabber, 'yt_dlp', None)
@@ -157,9 +217,9 @@ class TestParseChannelLine:
             'tvg-id="", Some News'
         )
 
-    def test_raises_on_missing_fields(self):
-        with pytest.raises(IndexError):
-            grabber.parse_channel_line('Only Name | group')
+    def test_skips_and_warns_on_missing_fields(self, capsys):
+        assert grabber.parse_channel_line('Only Name | group') is None
+        assert 'malformed channel line' in capsys.readouterr().err
 
     def test_strips_quotes_and_newlines_from_fields(self):
         line = ('Evil" ,x\n#EXTINF:-1, injected | g | https://logo.test/l.png | i')
@@ -251,32 +311,35 @@ class TestGrab:
 
 
 class TestFetchWithCurl:
-    def test_reads_output_file_written_by_curl(self, monkeypatch, tmp_path):
+    def test_returns_body_and_writes_temp_file(self, monkeypatch, tmp_path):
         temp_file = tmp_path / 'temp.txt'
         calls = []
 
-        def fake_run(argv, stdout, check):
+        def fake_run(argv, **kwargs):
             calls.append(argv)
-            stdout.write(b'line1\nline2\n')
+            return subprocess.CompletedProcess(argv, 0, stdout='line1\nline2\n', stderr='')
 
         monkeypatch.setattr(grabber.subprocess, 'run', fake_run)
-        assert grabber.fetch_with_curl('https://www.youtube.com/live',
+        assert grabber.fetch_with_curl('https://youtube.test/live',
                                        temp_file=str(temp_file)) == 'line1\nline2\n'
-        assert calls[0][0] == 'curl'
-        assert calls[0][-1] == 'https://www.youtube.com/live'
+        assert calls[0][0] == 'curl' and calls[0][-1] == 'https://youtube.test/live'
+        assert temp_file.read_text() == 'line1\nline2\n'
 
-    def test_passes_url_without_a_shell(self, monkeypatch, tmp_path):
-        """A url from youtube_channel_info.txt must never reach a shell."""
-        def no_shell(cmd):
-            raise AssertionError('curl must not run through a shell')
+    def test_returns_empty_body_and_warns_when_curl_fails(self, monkeypatch, capsys):
+        def fake_run(argv, **kwargs):
+            return subprocess.CompletedProcess(argv, 6, stdout='', stderr='resolve failed')
 
-        calls = []
-        monkeypatch.setattr(grabber.os, 'system', no_shell)
-        monkeypatch.setattr(grabber.subprocess, 'run',
-                            lambda argv, stdout, check: calls.append(argv))
-        injected = 'https://www.youtube.com/live"; touch pwned; "'
-        grabber.fetch_with_curl(injected, temp_file=str(tmp_path / 'temp.txt'))
-        assert calls[0][-1] == injected
+        monkeypatch.setattr(grabber.subprocess, 'run', fake_run)
+        assert grabber.fetch_with_curl('https://youtube.test/live') == ''
+        assert 'curl exited 6' in capsys.readouterr().err
+
+    def test_returns_empty_body_when_curl_is_missing(self, monkeypatch, capsys):
+        def fake_run(argv, **kwargs):
+            raise FileNotFoundError('curl')
+
+        monkeypatch.setattr(grabber.subprocess, 'run', fake_run)
+        assert grabber.fetch_with_curl('https://youtube.test/live') == ''
+        assert 'could not run curl' in capsys.readouterr().err
 
 
 class TestFetch:
@@ -285,6 +348,9 @@ class TestFetch:
 
         class Response:
             text = 'body'
+
+            def raise_for_status(self):
+                pass
 
         def fake_get(url, timeout, headers):
             captured.update(url=url, timeout=timeout, headers=headers)
@@ -296,20 +362,41 @@ class TestFetch:
         assert captured['timeout'] == 15
         assert captured['headers'] == grabber.BROWSER_HEADERS
 
+    def test_raises_on_error_status(self, monkeypatch):
+        class Response:
+            text = 'Too Many Requests'
+
+            def raise_for_status(self):
+                raise grabber.requests.HTTPError('429 Client Error')
+
+        monkeypatch.setattr(grabber.requests, 'get',
+                            lambda url, timeout, headers: Response())
+        with pytest.raises(grabber.requests.HTTPError):
+            grabber.fetch('https://youtube.test/live')
+
 
 class TestCleanup:
-    def test_removes_temp_files_when_temp_exists(self, monkeypatch, tmp_path):
+    def test_removes_temp_and_watch_files(self, monkeypatch, tmp_path):
+        monkeypatch.chdir(tmp_path)
         for name in ['temp.txt', 'watch1', 'youtube.m3u']:
             (tmp_path / name).write_text('x')
-        monkeypatch.chdir(tmp_path)
         grabber.cleanup()
         assert sorted(os.listdir(tmp_path)) == ['youtube.m3u']
 
-    def test_does_nothing_when_temp_missing(self, monkeypatch, tmp_path):
-        (tmp_path / 'watch1').write_text('x')
+    def test_does_nothing_when_temp_files_missing(self, monkeypatch, tmp_path):
         monkeypatch.chdir(tmp_path)
         grabber.cleanup()
-        assert os.listdir(tmp_path) == ['watch1']
+
+    def test_warns_when_a_file_cannot_be_removed(self, monkeypatch, tmp_path, capsys):
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / 'temp.txt').write_text('x')
+
+        def refuse(path):
+            raise PermissionError('read-only')
+
+        monkeypatch.setattr(grabber.os, 'remove', refuse)
+        grabber.cleanup()
+        assert 'could not remove temp.txt' in capsys.readouterr().err
 
 
 class TestMain:
