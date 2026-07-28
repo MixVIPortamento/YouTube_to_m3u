@@ -1,10 +1,9 @@
 #!/bin/bash
+set -euo pipefail
 
-echo $(dirname $0)
+cd "$(dirname "$0")/scripts"
 
 python3 -m pip install requests
-
-cd $(dirname $0)/scripts/
 
 python3 youtube_m3ugrabber.py > ../youtube.m3u
 
