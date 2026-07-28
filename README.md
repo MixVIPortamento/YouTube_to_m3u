@@ -26,6 +26,16 @@ chmod +x autorun.sh
 
 Do not forget to add a cron job set for every 4 hours(or 5) if you plan to run the script locally.
 
+### Requirements
+
+* Python 3 with `requirements.txt` installed (`requests`, `yt-dlp`)
+* A JavaScript runtime — [deno](https://deno.land) — because YouTube's player requires solving
+  a JS challenge before it exposes stream formats:
+
+``` bash
+curl -fsSL https://deno.land/install.sh | sh
+```
+
 ### YouTube bot checks
 
 YouTube answers most datacenter/CI requests with `Sign in to confirm you're not a bot`, so

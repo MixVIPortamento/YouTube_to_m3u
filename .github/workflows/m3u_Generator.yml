@@ -29,6 +29,11 @@ jobs:
         with:
           python-version: '3.x'
 
+      # yt-dlp needs a JS runtime to solve YouTube's player challenge.
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       # Optional: add a YOUTUBE_COOKIES repo secret (Netscape cookies.txt export)
       # and/or YTDLP_PROXY if YouTube bot-blocks the Actions runner IP.
       - name: Write cookies file

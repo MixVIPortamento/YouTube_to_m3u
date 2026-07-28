@@ -63,6 +63,9 @@ def ytdlp_options():
         'skip_download': True,
         'noplaylist': True,
         'socket_timeout': 20,
+        # YouTube's player requires solving a JS challenge to expose formats;
+        # needs a JS runtime (deno) plus yt-dlp's remote solver script.
+        'remote_components': ['ejs:github'],
     }
     cookies = os.environ.get(COOKIES_ENV)
     if cookies:
