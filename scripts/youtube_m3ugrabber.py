@@ -7,6 +7,7 @@ import re
 import subprocess
 import sys
 import time
+from urllib.parse import urlparse
 
 import requests
 
@@ -38,6 +39,15 @@ CHANNEL_INFO_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 # through a proxy.
 COOKIES_ENV = 'YOUTUBE_COOKIES'
 PROXY_ENV = 'YTDLP_PROXY'
+
+# youtube_channel_info.txt is editable by anyone opening a pull request, so its
+# urls are untrusted input: only fetch https urls on a YouTube host.
+ALLOWED_HOSTS = frozenset({
+    'youtube.com',
+    'www.youtube.com',
+    'm.youtube.com',
+    'youtu.be',
+})
 
 # Resolving a hundred channels back-to-back trips YouTube's rate limiting, which
 # surfaces as a bot check even on a signed-in session. Space the requests out and
@@ -135,6 +145,15 @@ def fetch(url):
     return response.text
 
 
+def is_allowed_url(url):
+    """True for https urls pointing at a YouTube host."""
+    try:
+        parsed = urlparse(url)
+    except ValueError:
+        return False
+    return parsed.scheme == 'https' and parsed.hostname in ALLOWED_HOSTS
+
+
 def fetch_with_curl(url, temp_file='temp.txt'):
     """Fetch url with curl; returns an empty body when curl fails."""
     try:
@@ -192,6 +211,10 @@ def hls_from_html(url):
 
 def grab(url):
     """Print the live .m3u8 link for a channel url; True when one was found."""
+    if not is_allowed_url(url):
+        print(f'# {url} -> refusing to fetch a non-YouTube url', file=sys.stderr)
+        print(NOT_AVAILABLE_LINK)
+        return False
     link = hls_from_ytdlp(url)
     if not link:
         try:
@@ -203,9 +226,14 @@ def grab(url):
     return bool(link)
 
 
+def sanitise_field(value):
+    """Drop quotes and newlines so an entry cannot forge extra m3u directives."""
+    return re.sub(r'[\r\n"]', '', value).strip()
+
+
 def parse_channel_line(line):
     """Parse a `name | group | logo | tvg-id` line into an #EXTINF line, or None."""
-    parts = [part.strip() for part in line.split('|')]
+    parts = [sanitise_field(part) for part in line.split('|')]
     if len(parts) < 4:
         print(f'# skipping malformed channel line, expected '
               f'"name | group | logo | tvg-id": {line}', file=sys.stderr)

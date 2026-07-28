@@ -10,6 +10,7 @@ import youtube_m3ugrabber as grabber  # noqa: E402
 
 
 HLS_LINK = 'https://manifest.googlevideo.com/api/manifest/hls_playlist/index.m3u8'
+CHANNEL_URL = 'https://www.youtube.com/gazi/live'
 
 # grab() is stubbed out by the no_network fixture below, so keep the real one.
 hls_from_ytdlp = grabber.hls_from_ytdlp
@@ -220,6 +221,14 @@ class TestParseChannelLine:
         assert grabber.parse_channel_line('Only Name | group') is None
         assert 'malformed channel line' in capsys.readouterr().err
 
+    def test_strips_quotes_and_newlines_from_fields(self):
+        line = ('Evil" ,x\n#EXTINF:-1, injected | g | https://logo.test/l.png | i')
+        extinf = grabber.parse_channel_line(line)
+        assert extinf.splitlines() == [extinf]
+        assert extinf.startswith('#EXTINF:-1 group-title="G" '
+                                 'tvg-logo="https://logo.test/l.png" tvg-id="i", ')
+        assert '"' not in extinf.split('tvg-id="i", ')[1]
+
 
 class TestHlsFromHtml:
     def test_returns_link_from_page(self, monkeypatch):
@@ -260,17 +269,17 @@ class TestGrab:
 
         monkeypatch.setattr(grabber, 'hls_from_ytdlp', lambda url: HLS_LINK)
         monkeypatch.setattr(grabber, 'hls_from_html', boom)
-        assert grabber.grab('https://youtube.test/live') is True
+        assert grabber.grab(CHANNEL_URL) is True
         assert capsys.readouterr().out.strip() == HLS_LINK
 
     def test_falls_back_to_html_scrape(self, monkeypatch, capsys):
         monkeypatch.setattr(grabber, 'hls_from_html', lambda url: HLS_LINK)
-        grabber.grab('https://youtube.test/live')
+        grabber.grab(CHANNEL_URL)
         assert capsys.readouterr().out.strip() == HLS_LINK
 
     def test_prints_not_available_when_both_paths_fail(self, monkeypatch, capsys):
         monkeypatch.setattr(grabber, 'hls_from_html', lambda url: None)
-        assert grabber.grab('https://youtube.test/live') is False
+        assert grabber.grab(CHANNEL_URL) is False
         assert capsys.readouterr().out.strip() == grabber.NOT_AVAILABLE_LINK
 
     def test_survives_request_exception(self, monkeypatch, capsys):
@@ -278,10 +287,27 @@ class TestGrab:
             raise grabber.requests.Timeout('too slow')
 
         monkeypatch.setattr(grabber, 'hls_from_html', raise_timeout)
-        grabber.grab('https://youtube.test/live')
+        grabber.grab(CHANNEL_URL)
         captured = capsys.readouterr()
         assert captured.out.strip() == grabber.NOT_AVAILABLE_LINK
         assert 'request failed' in captured.err
+
+    @pytest.mark.parametrize('url', [
+        'https://evil.test/live',
+        'https://www.youtube.com.evil.test/live',
+        'http://www.youtube.com/live',
+        'file:///etc/passwd',
+    ])
+    def test_refuses_urls_outside_youtube(self, monkeypatch, capsys, url):
+        def boom(_url):
+            raise AssertionError('untrusted url must not be fetched')
+
+        monkeypatch.setattr(grabber, 'hls_from_html', boom)
+        monkeypatch.setattr(grabber, 'hls_from_ytdlp', boom)
+        assert grabber.grab(url) is False
+        captured = capsys.readouterr()
+        assert captured.out.strip() == grabber.NOT_AVAILABLE_LINK
+        assert 'refusing to fetch' in captured.err
 
 
 class TestFetchWithCurl:
@@ -380,7 +406,7 @@ class TestMain:
             '~~ DO NOT EDIT\n'
             '\n'
             'Gazi TV Live | bangla | https://logo.test/gtv.png | gazi.bd\n'
-            'https://youtube.test/gazi/live\n'
+            f'{CHANNEL_URL}\n'
         )
         monkeypatch.setattr(grabber, 'hls_from_ytdlp', lambda url: HLS_LINK)
         monkeypatch.setattr(grabber, 'cleanup', lambda: None)
@@ -405,7 +431,7 @@ class TestMain:
 
     def test_warns_when_nothing_resolved(self, monkeypatch, tmp_path, capsys):
         channel_file = tmp_path / 'channels.txt'
-        channel_file.write_text('A | g | l |\nhttps://youtube.test/a/live\n')
+        channel_file.write_text(f'A | g | l |\n{CHANNEL_URL}\n')
         monkeypatch.setattr(grabber, 'hls_from_html', lambda url: None)
         monkeypatch.setattr(grabber, 'cleanup', lambda: None)
 
