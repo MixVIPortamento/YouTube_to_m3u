@@ -1,0 +1,3 @@
+requests
+# yt-dlp tracks YouTube's frequent player changes, so keep it unpinned/updated.
+yt-dlp

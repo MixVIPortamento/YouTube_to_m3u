@@ -10,16 +10,38 @@ import youtube_m3ugrabber as grabber  # noqa: E402
 
 HLS_LINK = 'https://manifest.googlevideo.com/api/manifest/hls_playlist/index.m3u8'
 
+# grab() is stubbed out by the no_network fixture below, so keep the real one.
+hls_from_ytdlp = grabber.hls_from_ytdlp
+
+
+@pytest.fixture(autouse=True)
+def no_network(monkeypatch):
+    """Fail loudly if a test forgets to stub an outbound call."""
+    def blocked(*args, **kwargs):
+        raise AssertionError('unexpected network call')
+
+    monkeypatch.setattr(grabber.requests, 'get', blocked)
+    monkeypatch.setattr(grabber, 'hls_from_ytdlp', lambda url: None)
+
 
 class TestExtractM3u8Link:
     def test_returns_none_when_no_m3u8_present(self):
         assert grabber.extract_m3u8_link('<html>no stream here</html>') is None
 
     def test_returns_none_when_m3u8_has_no_https_prefix(self):
-        assert grabber.extract_m3u8_link('"hlsManifestUrl":"index.m3u8"') is None
+        assert grabber.extract_m3u8_link('ref="index.m3u8"') is None
+
+    def test_prefers_hls_manifest_url_field(self):
+        response = f'{{"streamingData":{{"hlsManifestUrl":"{HLS_LINK}?variant=1"}}}}'
+        assert grabber.extract_m3u8_link(response) == f'{HLS_LINK}?variant=1'
+
+    def test_unescapes_hls_manifest_url(self):
+        escaped = HLS_LINK.replace('/', r'\/')
+        response = f'"hlsManifestUrl": "{escaped}"'
+        assert grabber.extract_m3u8_link(response) == HLS_LINK
 
     def test_extracts_link_from_embedded_json(self):
-        response = 'x' * 500 + f'"hlsManifestUrl":"{HLS_LINK}"' + 'y' * 500
+        response = 'x' * 500 + f'"someOtherUrl":"{HLS_LINK}"' + 'y' * 500
         assert grabber.extract_m3u8_link(response) == HLS_LINK
 
     def test_extracts_first_link_when_multiple_present(self):
@@ -32,6 +54,91 @@ class TestExtractM3u8Link:
 
     def test_extracts_link_at_start_of_response(self):
         assert grabber.extract_m3u8_link(HLS_LINK) == HLS_LINK
+
+
+class TestYtdlpOptions:
+    def test_omits_cookies_and_proxy_when_unset(self, monkeypatch):
+        monkeypatch.delenv(grabber.COOKIES_ENV, raising=False)
+        monkeypatch.delenv(grabber.PROXY_ENV, raising=False)
+        options = grabber.ytdlp_options()
+        assert 'cookiefile' not in options and 'proxy' not in options
+        assert options['skip_download'] is True
+
+    def test_passes_cookies_and_proxy_from_env(self, monkeypatch):
+        monkeypatch.setenv(grabber.COOKIES_ENV, '/tmp/cookies.txt')
+        monkeypatch.setenv(grabber.PROXY_ENV, 'http://proxy.test:8080')
+        options = grabber.ytdlp_options()
+        assert options['cookiefile'] == '/tmp/cookies.txt'
+        assert options['proxy'] == 'http://proxy.test:8080'
+
+
+class FakeYoutubeDL:
+    """Minimal stand-in for yt_dlp.YoutubeDL."""
+
+    def __init__(self, info=None, error=None):
+        self.info = info
+        self.error = error
+        self.options = None
+        self.requested = None
+
+    def __call__(self, options):
+        self.options = options
+        return self
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc_info):
+        return False
+
+    def extract_info(self, url, download=False):
+        self.requested = (url, download)
+        if self.error:
+            raise self.error
+        return self.info
+
+
+@pytest.fixture
+def fake_yt_dlp(monkeypatch):
+    def install(info=None, error=None):
+        fake = FakeYoutubeDL(info=info, error=error)
+        monkeypatch.setattr(grabber, 'yt_dlp',
+                            type('module', (), {'YoutubeDL': fake})())
+        return fake
+
+    return install
+
+
+class TestHlsFromYtdlp:
+    def test_returns_none_when_yt_dlp_missing(self, monkeypatch):
+        monkeypatch.setattr(grabber, 'yt_dlp', None)
+        assert hls_from_ytdlp('https://youtube.test/live') is None
+
+    def test_returns_manifest_url(self, fake_yt_dlp):
+        fake = fake_yt_dlp(info={'manifest_url': HLS_LINK, 'is_live': True})
+        assert hls_from_ytdlp('https://youtube.test/live') == HLS_LINK
+        assert fake.requested == ('https://youtube.test/live', False)
+        assert fake.options['skip_download'] is True
+
+    def test_falls_back_to_format_urls(self, fake_yt_dlp):
+        fake_yt_dlp(info={'formats': [
+            {'url': 'https://example.com/audio.mp4'},
+            {'url': f'{HLS_LINK}?itag=96'},
+        ]})
+        assert hls_from_ytdlp('https://youtube.test/live') == f'{HLS_LINK}?itag=96'
+
+    def test_returns_none_when_no_hls_format(self, fake_yt_dlp):
+        fake_yt_dlp(info={'formats': [{'url': 'https://example.com/video.mp4'}]})
+        assert hls_from_ytdlp('https://youtube.test/live') is None
+
+    def test_returns_none_and_warns_on_extraction_error(self, fake_yt_dlp, capsys):
+        fake_yt_dlp(error=RuntimeError('Sign in to confirm you are not a bot'))
+        assert hls_from_ytdlp('https://youtube.test/live') is None
+        assert 'not a bot' in capsys.readouterr().err
+
+    def test_returns_none_when_info_is_none(self, fake_yt_dlp):
+        fake_yt_dlp(info=None)
+        assert hls_from_ytdlp('https://youtube.test/live') is None
 
 
 class TestParseChannelLine:
@@ -54,43 +161,67 @@ class TestParseChannelLine:
             grabber.parse_channel_line('Only Name | group')
 
 
-class TestGrab:
-    def test_prints_link_when_request_contains_m3u8(self, monkeypatch, capsys):
-        monkeypatch.setattr(grabber, 'fetch', lambda url: f'junk {HLS_LINK} junk')
-        grabber.grab('https://youtube.test/live')
-        assert capsys.readouterr().out.strip() == HLS_LINK
+class TestHlsFromHtml:
+    def test_returns_link_from_page(self, monkeypatch):
+        monkeypatch.setattr(grabber, 'fetch',
+                            lambda url: f'"hlsManifestUrl":"{HLS_LINK}"')
+        assert grabber.hls_from_html('https://youtube.test/live') == HLS_LINK
 
-    def test_falls_back_to_curl_when_request_has_no_m3u8(self, monkeypatch, capsys):
-        calls = []
+    def test_falls_back_to_curl(self, monkeypatch):
         monkeypatch.setattr(grabber, 'windows', False)
         monkeypatch.setattr(grabber, 'fetch', lambda url: 'offline')
         monkeypatch.setattr(grabber, 'fetch_with_curl',
-                            lambda url: calls.append(url) or f'x {HLS_LINK}')
-        grabber.grab('https://youtube.test/live')
-        assert calls == ['https://youtube.test/live']
-        assert capsys.readouterr().out.strip() == HLS_LINK
+                            lambda url: f'"hlsManifestUrl":"{HLS_LINK}"')
+        assert grabber.hls_from_html('https://youtube.test/live') == HLS_LINK
 
-    def test_prints_not_available_when_curl_also_fails(self, monkeypatch, capsys):
-        monkeypatch.setattr(grabber, 'windows', False)
-        monkeypatch.setattr(grabber, 'fetch', lambda url: 'offline')
-        monkeypatch.setattr(grabber, 'fetch_with_curl', lambda url: 'offline')
-        grabber.grab('https://youtube.test/live')
-        assert capsys.readouterr().out.strip() == grabber.NOT_AVAILABLE_LINK
-
-    def test_skips_curl_fallback_on_windows(self, monkeypatch, capsys):
+    def test_skips_curl_fallback_on_windows(self, monkeypatch):
         def boom(url):
             raise AssertionError('curl fallback must not run on windows')
 
         monkeypatch.setattr(grabber, 'windows', True)
         monkeypatch.setattr(grabber, 'fetch', lambda url: 'offline')
         monkeypatch.setattr(grabber, 'fetch_with_curl', boom)
+        assert grabber.hls_from_html('https://youtube.test/live') is None
+
+    def test_reports_playability_status(self, monkeypatch, capsys):
+        monkeypatch.setattr(grabber, 'windows', False)
+        monkeypatch.setattr(
+            grabber, 'fetch',
+            lambda url: '"playabilityStatus":{"status":"LOGIN_REQUIRED","reason":"bot"}')
+        monkeypatch.setattr(grabber, 'fetch_with_curl', lambda url: 'offline')
+        assert grabber.hls_from_html('https://youtube.test/live') is None
+        assert 'LOGIN_REQUIRED' in capsys.readouterr().err
+
+
+class TestGrab:
+    def test_prefers_ytdlp_result(self, monkeypatch, capsys):
+        def boom(url):
+            raise AssertionError('html scrape must not run when yt-dlp succeeds')
+
+        monkeypatch.setattr(grabber, 'hls_from_ytdlp', lambda url: HLS_LINK)
+        monkeypatch.setattr(grabber, 'hls_from_html', boom)
+        grabber.grab('https://youtube.test/live')
+        assert capsys.readouterr().out.strip() == HLS_LINK
+
+    def test_falls_back_to_html_scrape(self, monkeypatch, capsys):
+        monkeypatch.setattr(grabber, 'hls_from_html', lambda url: HLS_LINK)
+        grabber.grab('https://youtube.test/live')
+        assert capsys.readouterr().out.strip() == HLS_LINK
+
+    def test_prints_not_available_when_both_paths_fail(self, monkeypatch, capsys):
+        monkeypatch.setattr(grabber, 'hls_from_html', lambda url: None)
         grabber.grab('https://youtube.test/live')
         assert capsys.readouterr().out.strip() == grabber.NOT_AVAILABLE_LINK
 
-    def test_prints_not_available_when_m3u8_has_no_https(self, monkeypatch, capsys):
-        monkeypatch.setattr(grabber, 'fetch', lambda url: 'ref="index.m3u8"')
+    def test_survives_request_exception(self, monkeypatch, capsys):
+        def raise_timeout(url):
+            raise grabber.requests.Timeout('too slow')
+
+        monkeypatch.setattr(grabber, 'hls_from_html', raise_timeout)
         grabber.grab('https://youtube.test/live')
-        assert capsys.readouterr().out.strip() == grabber.NOT_AVAILABLE_LINK
+        captured = capsys.readouterr()
+        assert captured.out.strip() == grabber.NOT_AVAILABLE_LINK
+        assert 'request failed' in captured.err
 
 
 class TestFetchWithCurl:
@@ -106,24 +237,26 @@ class TestFetchWithCurl:
         monkeypatch.setattr(grabber.os, 'system', fake_system)
         assert grabber.fetch_with_curl('https://youtube.test/live',
                                        temp_file=str(temp_file)) == 'line1\nline2\n'
-        assert commands == [f'curl "https://youtube.test/live" > {temp_file}']
+        assert commands[0].startswith('curl -sL -A "Mozilla/5.0')
+        assert commands[0].endswith(f'"https://youtube.test/live" > {temp_file}')
 
 
 class TestFetch:
-    def test_requests_url_with_timeout(self, monkeypatch):
+    def test_requests_url_with_timeout_and_browser_headers(self, monkeypatch):
         captured = {}
 
         class Response:
             text = 'body'
 
-        def fake_get(url, timeout):
-            captured['url'] = url
-            captured['timeout'] = timeout
+        def fake_get(url, timeout, headers):
+            captured.update(url=url, timeout=timeout, headers=headers)
             return Response()
 
         monkeypatch.setattr(grabber.requests, 'get', fake_get)
         assert grabber.fetch('https://youtube.test/live') == 'body'
-        assert captured == {'url': 'https://youtube.test/live', 'timeout': 15}
+        assert captured['url'] == 'https://youtube.test/live'
+        assert captured['timeout'] == 15
+        assert captured['headers'] == grabber.BROWSER_HEADERS
 
 
 class TestCleanup:
@@ -132,7 +265,7 @@ class TestCleanup:
         monkeypatch.setattr(grabber.os, 'listdir', lambda: ['temp.txt', 'watch1'])
         monkeypatch.setattr(grabber.os, 'system', lambda cmd: commands.append(cmd))
         grabber.cleanup()
-        assert commands == ['rm temp.txt', 'rm watch*']
+        assert commands == ['rm -f temp.txt', 'rm -f watch*']
 
     def test_does_nothing_when_temp_missing(self, monkeypatch):
         def boom(cmd):
@@ -152,7 +285,7 @@ class TestMain:
             'Gazi TV Live | bangla | https://logo.test/gtv.png | gazi.bd\n'
             'https://youtube.test/gazi/live\n'
         )
-        monkeypatch.setattr(grabber, 'fetch', lambda url: f'junk {HLS_LINK}')
+        monkeypatch.setattr(grabber, 'hls_from_ytdlp', lambda url: HLS_LINK)
         monkeypatch.setattr(grabber, 'cleanup', lambda: None)
 
         grabber.main(str(channel_file))

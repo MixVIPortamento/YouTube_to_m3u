@@ -26,6 +26,31 @@ chmod +x autorun.sh
 
 Do not forget to add a cron job set for every 4 hours(or 5) if you plan to run the script locally.
 
+### YouTube bot checks
+
+YouTube answers most datacenter/CI requests with `Sign in to confirm you're not a bot`, so
+anonymous runs fall back to the `moose_na.m3u` placeholder instead of a stream. Two optional
+knobs work around it, used by both `scripts/youtube_m3ugrabber.py` and the GitHub Action:
+
+| Variable / repo secret | Purpose |
+| --- | --- |
+| `YOUTUBE_COOKIES` | Path to a Netscape-format `cookies.txt` export (locally), or the file contents (as a repo secret) |
+| `YTDLP_PROXY` | Proxy URL used for YouTube requests, e.g. `http://user:pass@host:port` |
+
+``` bash
+export YOUTUBE_COOKIES=~/cookies.txt   # exported from a signed-in browser
+./autorun.sh
+```
+
+Use a throwaway Google account for cookies — YouTube may flag accounts used for automation.
+
+### Tests
+
+``` bash
+python3 -m pip install -r requirements-dev.txt
+python3 -m pytest tests -q --cov=scripts
+```
+
 ### Support
 
 🙂 https://www.buymeacoffee.com/benmoose39
