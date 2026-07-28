@@ -22,6 +22,8 @@ import requests
 NA_LINK = 'https://raw.githubusercontent.com/benmoose39/YouTube_to_m3u/main/assets/moose_na.m3u'
 CHANNEL_INFO = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'youtube_channel_info.txt')
 TEMP_FILE = 'temp.txt'
+EXIT_ERROR = 1
+EXIT_NO_STREAMS = 2
 
 windows = 'win' in sys.platform
 
@@ -128,7 +130,7 @@ def main():
             lines = f.readlines()
     except OSError as e:
         print(f'ERROR: could not read {CHANNEL_INFO}: {e}', file=sys.stderr)
-        return 1
+        return EXIT_ERROR
 
     attempted = 0
     succeeded = 0
@@ -150,7 +152,7 @@ def main():
 
     if attempted and not succeeded:
         print(f'ERROR: none of the {attempted} channels could be resolved', file=sys.stderr)
-        return 1
+        return EXIT_NO_STREAMS
     if succeeded < attempted:
         warn(f'{attempted - succeeded} of {attempted} channels could not be resolved')
     return 0
