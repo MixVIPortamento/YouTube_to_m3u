@@ -48,10 +48,10 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Tamil" tvg-logo="http://www.thanthitv.com/Images/TTV-800x800.png" tvg-id="830", Thanthi TV
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1786453200/ei/cMh6apmWA-aGt7EPid_L2Qs/ip/20.171.55.53/id/_Yhn3qJA73Q.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/bui/AZFlqhPHYfJZ3dpoLUbFyBAdWH30XsMIIdY-GT0ihi1j1e05PuqFXpoJxXfSLIEicUacIph_jZRDkEWl/spc/KBGBci4GJMKjmhdsTQ42-hRv1XI8S4FpjDtFbP9lgRV4rWiKtmB07JA/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51946837%2C52089682/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRAIgQHY442d1FCt3aFdkDfBiFHOlkYhkxTqUmI6qYnY9PowCIGMPu9SdQ6VywaAmW5L8SdqKgwuS1EnmgGdFfLYH8Mhl/file/index.m3u8
 
 #EXTINF:-1 group-title="Tamil" tvg-logo="http://7starcloud.in/NB.png" tvg-id="ts58", New18 TamilNadu
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1786453205/ei/dch6auTlAtWZsfIPk9qn0Q8/ip/20.171.55.53/id/hkwqmfYc3Y4.2/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/bui/AZFlqhNJsDxcHscMSwFBO4P_NCTxv4w3VHZjpO2o0rLl4k7iFPgNRdYpOdZmXXjDyZKOhFKBcsKTVpC7/spc/KBGBcjZbKdGjCSiH1pJRb7ocR33YIgbu6Lu_gUEswAPvwMgEYuxF0NY/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51946837%2C52089682/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRAIge2Es6u47lC_cDKSnxqEoLcVzxnn8JOGlBgwgjYzdL5sCICc9-eyLFaLlpWlmH0Xh12uPhGyakEo-BOJFLU7HDFQp/file/index.m3u8
 
 #EXTINF:-1 group-title="Tamil" tvg-logo="http://image.airtel.tv/MWTV/MWTV_LIVETVCHANNEL_793/LOGO/5Jz56JGv.png" tvg-id="677", Puthiya Thalaimurai
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -174,7 +174,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Radio" tvg-logo="http://vignette4.wikia.nocookie.net/justdance/images/0/0c/Logo-jdtcm1924788.png" tvg-id="", Best Suffle Dance
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1786194001/ei/8dN2atz3Mf-hlu8P25OVmQU/ip/135.232.177.170/id/qWf-FPFmVw0.7/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/bui/AZFlqhMWlVNgUousWueIMSRuyr1H5pqnlmofCHvghKdycPtGiRcccW9mQqSofqRH2GQYtebcMeGdA5R2/spc/KBGBcrViUVogCvnvpEc_e8vs1uQ9pcIBZgY0LcgIllwYuzT739uLZ8w/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51946837%2C52089682/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRgIhAJtXQV4ZFIfwC01TZSBvuJiIs5c6xYzBW3jccf-ljTO1AiEAgMS4HYZ1ibZlNN0pEQuIvucahxOZHop2S0T5w6fkj7E%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Radio" tvg-logo="https://freepngimg.com/thumb/meditation/7-2-meditation-transparent.png" tvg-id="", Meditation Music
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
