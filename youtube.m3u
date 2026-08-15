@@ -72,7 +72,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Indonesia" tvg-logo="https://i.ytimg.com/vi/Bz_lsdTuNl0/hq720_2.jpg" tvg-id="", Tribunnews Live
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1786777134/ei/zbl_aoPtO-ukir4P4v6fuQc/ip/40.116.72.210/id/G5KDTdHVb4M.2/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/bui/AZFlqhNQ7OTmTFoWqYm2e3wHd32ogjwCuEUQryyfOs4IVAtyTFL4H72n2dttiUzKvxSqyFMic1XH4U2l/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51946837%2C52089683/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cbui%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIgcLT_Yij7dSsCALXPNlAE7Tyqj7Nhkw0N-rP82-BgKE0CIQDBOCiUZjD1mYN-BNr4_OpyA2E5KBb-Uz4LDs5r8kExKA%3D%3D/file/index.m3u8
 
 #EXTINF:-1 group-title="Indonesia" tvg-logo="https://yt3.googleusercontent.com/vbuUafrm9l9BJi1U2EUuMjc2bKPKt9EjODDvkEqvVewyhC-7XGM1afgemhun9hYOy73QSu6f=s0" tvg-id="", tvOneNews
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -277,7 +277,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Taiwan News" tvg-logo="" tvg-id="", TVBS News
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1786607559/ei/ZyN9asbQLsDjir4PjL3tgQs/ip/135.232.201.50/id/2mCSYvcfhtc.5/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/gcr/us/bui/AZFlqhPFIGvLANMelzMx5-ItcE9-BMhp3ubwN6fE-OrFBPVRouno2QEAp0yd9AOS5Cr_6_vV47vONZ2a/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51946837%2C52089683/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cgcr%2Cbui%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIgQcwFnB2zxjYJ0h5k-MoVSoaGKfd3N_y2cKDlcigawO0CIQDVCm63aQpPCR75Nxva-G5qkInNR_Oap1mzz2TQDYmniw%3D%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Taiwan News" tvg-logo="" tvg-id="", Taiwan TTV News
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
