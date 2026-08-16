@@ -84,7 +84,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Indonesia" tvg-logo="https://yt3.googleusercontent.com/qX0Or-6wqAYGXEPiWV6ELZmJGRm2JtOIYYd2r54UQqaDKFlBeezvfgT_b6SB3JZTS16RjANs=s0" tvg-id="", METRO TV
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1786937115/ei/uyqCapX6AdThkucPlYy4qQ4/ip/172.203.207.195/id/hjNOqYN6UJo.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/bui/AR3QkAnmMeM7FoGWHzvgSqwXKZrTH8tFTUICXY5QlN33blaRIEQ14Tiky4M518F0B8un5aZXVdJ2kpRG/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51946837%2C52089683/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cbui%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIhAMhoyfWZ9Z36kS-enAOH8bgjzhWFWUEPeUhxklWUj_AJAiBOE8eVKAx93G4BRRGYtJA5I9RE-NzpZ8YYsN_hspycrA%3D%3D/file/index.m3u8
 
 #EXTINF:-1 group-title="Indonesia" tvg-logo="https://yt3.googleusercontent.com/2pqcB8Iq2Q-cLF8oxkwVJm-3tE0MbNZKg0hN8-Peq0cMXjIvBoPeyYMd7FW4744ENWQVw-Zj=s0" tvg-id="", IDX CHANNEL
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -241,7 +241,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="East Africa" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLTG_qnW-VSIBNXd1LJRD3Ud6bYSERVFJ4GBlO0U=s176-c-k-c0x00ffffff-no-rj" tvg-id="", NTV Kenya Kenya
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1786906454/ei/9rKBaqOqG5GGkucPhZOKsA4/ip/20.42.9.237/id/6Qj6kqBhflc.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/bui/AR3QkAlk6ujOLJ035s6l3djTTL13P9FSxCWIbnuyhZs7WvvjkWF9wTGFh8fJVhMi87V681RlppTuiIkj/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51946837%2C52089683/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cbui%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRgIhAIcUT-BLWzdsO75rLvo0HN-7EPgus6gT4limdDVrFBFmAiEAo1CThJeJDa4MEwfYcLpnsUCM71f9UXNW-QTYG_7LU2w%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="East Africa" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLQkcR_PzChnpoy_CFEHOhBJoWYzJPUOryL2McEGBSQ=s176-c-k-c0x00ffffff-no-rj" tvg-id="", KTN News Kenya
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
