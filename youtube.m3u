@@ -114,7 +114,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Kannada" tvg-logo="" tvg-id="", NewsFirst Kannada
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1786960747/ei/C4eCavOUF_eL-coPgqiJ8Qk/ip/135.232.201.70/id/J9RbDvjS-FU.3/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/bui/AR3QkAmUjE6utXQD_18_Se874eSHLVzf8dfCmCtkFR0qKK24uQr8QVw4kZxQCn3_VJChnj_JKN-jS7Ga/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51946837%2C52089683/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cbui%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIgTH92l7seDEqSczSsu4dYUhUpFpmqd8dTDkXxlT6Ft4wCIQCgBhBL8lzDC1Ji-L2a6cW0h-fmXIcArWLmE7kMwkPpwQ%3D%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Gujarati" tvg-logo="https://yt3.ggpht.com/ytc/AKedOLR8E478gf4F3e11eXaV1Th88zd2m4OEOp77VpnE1A=s88-c-k-c0x00ffffff-no-rj" tvg-id="", TV9 Gujarati
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -223,7 +223,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Travel" tvg-logo="https://yt3.googleusercontent.com/tnXIAzoWzmNPv_o8VSy1yTlheZUsfHs2zIBZv-VJK4g49PmsHDoOmVeVrTTNIVyXzCN00l_D7Q=s0" tvg-id="", Cruise1st TV
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1787058004/ei/9AKEauCsFpKYsfIPy-LYcA/ip/20.168.128.197/id/aTJGSuZPNpM.3/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/bui/AR3QkAmLnqIFvK5bXfj-Ot_D3xmT1BtTeFu9jcZI65tvNPDsOnepZeOIql80cBduwnDTgUb90ceKDWW9/spc/KBGBcv5fp7Ac7H2ITEJfD32BPncLZOMJL_qLY7woE2wp4wVbelZB/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51946838/dover/11/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRAIgJvlXQzH0C-BRzPJxmGXZ-Fx2j2hErAhlLfgtkQKBkJUCIHmt849iL7nGngseYvwd7RuGzk7kSS8SqdAiv6djiwsj/file/index.m3u8
 
 #EXTINF:-1 group-title="Philippines" tvg-logo="" tvg-id="", ABS-CBN Entertainment- Kapamilya Online Live
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
