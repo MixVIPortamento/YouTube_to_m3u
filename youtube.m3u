@@ -51,7 +51,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Tamil" tvg-logo="http://7starcloud.in/NB.png" tvg-id="ts58", New18 TamilNadu
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1787468347/ei/20WKavrLGdvpvPEP8oemsQ8/ip/135.232.177.250/id/HUozPwGlFoc.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/bui/AR3QkAmDUSV6_iNyM7fi-q-957rCKbRAZk0qa9L-oDvPcAmR-vQVvWEKnieNZyABH21TddxPOxNLGZz4/spc/KBGBctNbXL50qn01Ye_PJAZ_mEXOKKUwM0mx8_pTLjYmmFyUX8YVsQKtRQ/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRAIgD4ZRFw05gSHo9jsQBgs2Q_gY_o2lGIt67yGh5vY0b5QCIBO0SeJ7DM9eMjIcLDPa4diMI_H32WWoyAb5mVLWh3Y0/file/index.m3u8
 
 #EXTINF:-1 group-title="Tamil" tvg-logo="http://image.airtel.tv/MWTV/MWTV_LIVETVCHANNEL_793/LOGO/5Jz56JGv.png" tvg-id="677", Puthiya Thalaimurai
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -213,7 +213,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Kids" tvg-logo="https://yt3.googleusercontent.com/GsBWcfJJbCKMQ-ndyaeLPqIwfqvU2dughQEl0eGRP8MfvML-HIl5HK_vamdjOWzbvMSLdLINGA=s0" tvg-id="", Nat Geo Kids
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1787317200/ei/cPeHas-7NayAkucP_PyQ6Qk/ip/20.55.214.64/id/H-h657jXQyA.3/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/maudio/1/gcr/us/bui/AR3QkAmPiQoR1UtQHw3hD7xNmCBLOL992cbC1Ps6ZSM3jM3pOppXcFX7mP9C9WzUNpcCY3U5CWJsJV9T/spc/KBGBcpz9bc4NITmRLs784fvBYLX2tDyWG3fg3ayyt05Gt8sG9W7gdLHO91qxiTkuG6NuH6Ac2B08Tg/vprv/1/go/1/ns/6iwMOyubAkJ78NwlRDY0IacX/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115%2C51973818/dover/11/n/u6DOdnAuQjKLkA/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cmaudio%2Cgcr%2Cbui%2Cspc%2Cvprv%2Cgo%2Cns%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRgIhALKQk4TaK6sE7ZtSKBdrV8kQ2zB4BVjms8k0BjZUzO3FAiEA48KQQ9A8-JrEFjvceoJzP7fewJ_Vi5p4hvd1plv0pno%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Kids" tvg-logo="https://yt3.googleusercontent.com/_mS_6uoUuCSFlAvnDVkQ5VypoeihV7kreM8mxgYNbEFWBaK5iyL4DikpAuEtsAVukb9lDn0ZXw=s0" tvg-id="", Mini Moments - Animal Friends
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
