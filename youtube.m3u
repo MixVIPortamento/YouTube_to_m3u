@@ -27,7 +27,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Malayalam" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Mathrubhumi_news.svg/1200px-Mathrubhumi_news.svg.png" tvg-id="", Mathrubhumi News
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1788566334/ei/3gabavKgBMmV2_gPxcyKsA0/ip/135.232.201.230/id/RbxEftGN584.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/bui/AR3QkAnk-eNICru8ezwnPgG5k-kAoSeLgGBnY7WmIVITlafW4FI8Gam20_5oWu4XQcNEYx7RzLoXfi7I/spc/I-rgIY7vGsyatfk_L-_FrObUyYrO9QnU9-kx2DVLA01OjEeuR4S2pvYMyg/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52135441%2C52189887/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIgHwG6n2qSl5PaR-6h9EhVocPaEzoatx_OkePyIL57GCcCIQCuaDQ2Wj2Wn7JcL08dq_q9qEk9JdSRmev0FyVJLizwog%3D%3D/file/index.m3u8
 
 #EXTINF:-1 group-title="Malayalam" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/62/Media_One_Logo.png" tvg-id="", Media One News
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -60,7 +60,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="English" tvg-logo="https://s.abcnews.com/assets/beta/assets/abcn_images/abcnews_pearl_stacked.png" tvg-id="", ABC News
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1788549071/ei/b8Oaas2vEqehlu8PuJb_wAU/ip/20.51.57.123/id/C8-zDuZwVh0.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/ss/1/bui/AR3QkAnM8E-wPDWRoTMg2Kdz1uftOI0diaHyTcyf0IvD7wpXvBAflIom8jvo2K31bN1FFylZwatY9_J-/spc/I-rgIZJ601OwWXqRDphg2BIfztlMMZlbZV6XlmSGDn1BdyH3XiVUH7i8KA/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52135441/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Css%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRgIhAP6v8cfTkQRn-F7c6hWVHUkOyVJfGnqTlQHQpWb1dbQEAiEAuEhdkUBMuw6vogjCCECaeLIn70NgmPf_taVXrTw4Nb8%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="English" tvg-logo="https://yt3.ggpht.com/ytc/AAUvwniz5-dorFPbRs3b2CYaJSV2VOVxq53EqcwdWOF8Gg=s900-c-k-c0x00ffffff-no-rj" tvg-id="", News 12 New York
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
