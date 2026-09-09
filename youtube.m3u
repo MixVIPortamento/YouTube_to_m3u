@@ -111,7 +111,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Kannada" tvg-logo="https://d2jo35ozacw6sq.cloudfront.net/wp-content/themes/tv9kannada/images/Tv9-Kannada-57x57.png" tvg-id="", TV9 Kannada
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1788943407/ei/z8egau8uh4GW7w_PpuH4CQ/ip/20.186.238.32/id/ImDq_qmKhEI.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/bui/AR3QkAnN6_5o-GDKrKU0_aGtzzKNibicR5XUCylz9Zg1bySEyr3Cb_1_bj1kL4YxUwNjPhEVng78uOsd/spc/I-rgIRUqZp88fM2breq7Si-QIZgci0bSqdVjbLYOwz9AcUIPfuG30jaWtg/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52135441%2C52189887/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIhANtxBXPTuIGv8R2Mi20RxWXk89t-vhianKEoBZdwouinAiBLVMxpczL7tz_bNDyBMwRFLZhOnSQyVE4DFSVmJYI0Vg%3D%3D/file/index.m3u8
 
 #EXTINF:-1 group-title="Kannada" tvg-logo="" tvg-id="", NewsFirst Kannada
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -123,7 +123,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="News" tvg-logo="" tvg-id="", Roland Martin Unfiltered
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1788931391/ei/35igaoGVKrP4ybgP4a3FmA0/ip/74.249.180.163/id/bcONl1Gp8jc.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/bui/AR3QkAkIqczDaCQuQ33o5XSODKywLqi8YEQUg4NvwD7x2E747Ajs72j7MXOrevZEg5TaaL7HaIhl0FsM/spc/I-rgITcKJOOGxJUP3Nw2--uoYNPuwlVd1WUZ3DKNA_rLeFcJdFUUNs5bbQ/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52135441%2C52189887/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRgIhAIia3C8QqWZDR_Pb-XQfpAk43Z1Y1IwaGiDRRiVwxTEbAiEAqbf8cuaapAaue6KB24j55rpuMm_yxU0q00c1pLxSMRE%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Exyu" tvg-logo="https://upload.wikimedia.org/wikipedia/en/9/9f/Al_Jazeera_Balkans.png" tvg-id="", Al Jazeera Balkans
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
