@@ -72,7 +72,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Indonesia" tvg-logo="https://i.ytimg.com/vi/Bz_lsdTuNl0/hq720_2.jpg" tvg-id="", Tribunnews Live
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1789102948/ei/BDejaty4Hfew2_gPruKXoQM/ip/64.236.131.245/id/8JCHp0w19bk.2/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/900/manifest_duration/900/demuxed/1/maudio/1/bui/AR3QkAmwGMlSHhWCXkIoGdhz74-LJ9rqBxjQQGXtaWqhOHb3FrGSNhT_8WXsGnlSAOAGQcFSJPcgNEhu/spc/I-rgIeFNquX6QCd-8ZXivRj1G7BAz4vazP60nQw90iiouWo83JYOJSNlvg/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52135441/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRgIhAJ64GdF1GBvCzd_hX0FgZfO6v4PE9ZAE6wLc5OsrNid8AiEAhBuwvwece_0AzoJ3naxVoyP4uTMRRa9kM63Cwk7I6Tg%3D/file/index.m3u8
 
 #EXTINF:-1 group-title="Indonesia" tvg-logo="https://yt3.googleusercontent.com/vbuUafrm9l9BJi1U2EUuMjc2bKPKt9EjODDvkEqvVewyhC-7XGM1afgemhun9hYOy73QSu6f=s0" tvg-id="", tvOneNews
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -298,7 +298,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Entertainment" tvg-logo="" tvg-id="", Kitten Academy Livestream
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1789031190/ei/th6iaq-jMbfCvPEPyfe-wQ4/ip/172.184.210.243/id/T4XZmMPQ9Kw.5/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/bui/AR3QkAmIwyvT4yASGTCYDHW2A98_SyCkfD5nNtZgeA6h9e2EFtKYV3qIewGtwyvWaycY1F738zhHvg9m/spc/I-rgIW0pfFRkpgJdG-lhsn_wHPkxlXXF_xWYd1OmcEBMEE7q2KrnqrtnKg/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52135441%2C52189887/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRgIhAPBILa2j98_mX67oPUdIsE1z1HTwv_9hJ3rNKlvDnIVPAiEApU9HPYPc1JhUiGXs6c0aXe0KbBjEsBQp9B2vNbYXH0k%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Malaysia" tvg-logo="" tvg-id="", Bernama TV
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
