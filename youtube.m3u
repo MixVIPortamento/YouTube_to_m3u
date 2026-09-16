@@ -63,7 +63,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="English" tvg-logo="https://yt3.ggpht.com/ytc/AAUvwniz5-dorFPbRs3b2CYaJSV2VOVxq53EqcwdWOF8Gg=s900-c-k-c0x00ffffff-no-rj" tvg-id="", News 12 New York
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1789605856/ei/gOOqarGHF5z2ybgP_su20AU/ip/57.151.128.136/id/JEtvLd4B-AY.5/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/bui/AR3QkAl_S5USyuqgXo84C0kTHikZndj52of6kjvhrJlGKfkh2gmgQh8giiXZ_H2IMmc0qcWdsGlhFqIP/spc/I-rgIXF_tgnzchPmNFuEm_EKlUnHSeNNaBrwdbv-lMSiDVwPoepzoxq8Dw/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIhALRdpTXdCg0Iho2Qis23bFh5xQmQG92o2vHW0P-6Hhr4AiBFRI_bH6IZYWGHeXl0EXsGjFpPEEmsR57-IF7XEz4HWQ%3D%3D/file/index.m3u8
 
 #EXTINF:-1 group-title="Albania" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/7/7e/Euronews._2016_logo.png" tvg-id="", Euronews Albania
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -322,7 +322,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Marathi" tvg-logo="" tvg-id="", ABP MAZHA
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1789423862/ei/lhyoarqYEo6Jlu8PvIad0QM/ip/40.77.124.157/id/tmz1Qu1MuSs.1/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/bui/AR3QkAkRTfVmmuSXseq6WOHc-b_EKUfmRw6EyPVN7KkQ1FeL7IA24Ja75wEmg9pp0V7dtMwoJxHHMnaE/spc/I-rgIbrRXeeZTZxtp8SZ7M8fq9XPq8IHItQcCsoEoVi_ZtzsRadncCrEcw/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52135441/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRgIhAPsfj5-F5vR0f15Dt_2-YM5k9ZxdULYtRjHUV2aUAEl4AiEAptWBp4z3YFdfSQg-BZsLzUNxhEv24ZsrRNrN1UxfC0I%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Marathi" tvg-logo="" tvg-id="", Saam TV
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
