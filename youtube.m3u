@@ -33,7 +33,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Malayalam" tvg-logo="https://play-lh.googleusercontent.com/k0A88RrzsPqX1D75am5_bOJ3M2Y0R0fXi7gu4BfgmS2GkuUNvFnSLMmCaLBK0BhQ9Es" tvg-id="", Manorama News
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1789956610/ei/oj2wasrBAfeEkucPgO66uA0/ip/20.55.13.169/id/tgBTspqA5nY.3~45728542/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/bui/AR3QkAk7YT-kZAbV1Gse9hJxYJlFR1u3o1yL3mm71W8TSmmVJndD5B2tanu_RsITXIOQU5mKVoE9AJCu/spc/I-rgIb5MgjN208tDqMUKStqbUrXfNeIcubGjSk9fR0q_aadFYfFgHhOAog/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRAIgQgR61RkcXsuI503NxiSIbut8VddMuosatA1hbBnC1IoCIBlChtMvbojVlT7EU6K2QsR3jatn4tr9MOJz7ocLjajZ/file/index.m3u8
 
 #EXTINF:-1 group-title="Malayalam" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/05/News18_Kerala.png" tvg-id="", News 18 Kerala
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -210,7 +210,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Kids" tvg-logo="https://yt3.googleusercontent.com/Qbi8o0IRFgKn0oIX_tPBqkeYyWCi293sfpIhd0OtP0xdC-LsCOXUStLWo1EPX__JfTve3or1BQ=s0" tvg-id="", Disney Kids
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1789870505/ei/Se2uaoHEE__BkucP8qOAuAk/ip/172.203.207.240/id/7YPXF9azaA4.2/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/maudio/1/gcr/us/bui/AR3QkAkfemHTm7RYXXq63v3yRjyqAAu95oza75nhSgbvetSULdta0b_I9D2uXcNEGi5KEeAPlaMSRwlu/spc/I-rgIbs_moP51vkY9ZR1grzPXRPLC9w6tMFpPlZQsGkUlpkDRelVp_LXrCUuOPoXHMrRLXzE/vprv/1/go/1/ns/JAiPTuuTlj8enBYNSTjSvrcY/rqh/5/reg/0/pacing/0/nvgoi/1/ncsapi/1/keepalive/yes/fexp/51565115/dover/11/n/Cjiu6-IusGZ_SQ/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cmaudio%2Cgcr%2Cbui%2Cspc%2Cvprv%2Cgo%2Cns%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRgIhAL-TjoC9I36fKBhzEBH7A5fSaOaOkanWy1DRBfzWmaWJAiEA0E_9lISH3ASVtWbVWMnsQwsghO8z4FWbwQqrxx-1SxE%3D/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Kids" tvg-logo="https://yt3.googleusercontent.com/GsBWcfJJbCKMQ-ndyaeLPqIwfqvU2dughQEl0eGRP8MfvML-HIl5HK_vamdjOWzbvMSLdLINGA=s0" tvg-id="", Nat Geo Kids
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
