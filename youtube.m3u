@@ -36,7 +36,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Malayalam" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/05/News18_Kerala.png" tvg-id="", News 18 Kerala
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1790541167/ei/Dym5auCHEoyDkucPocOcoAc/ip/172.203.207.243/id/zZ6tOqjds6M.2/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/30/manifest_duration/30/demuxed/1/maudio/1/bui/AWzQHwqo1ML_8GOzRL6BZdpLFsDp3kKbxfHGUvABHdQSvJrrefIMf-I02002JSEkX-zbtP0IqwWBDzVY/spc/I-rgIcIsoSQTKOi2Zt6CkwbW3d7b8WuPZH8egn6NMf26WOWKW98lZ0FeoA/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52178456/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIhAN0AQjyplTIpXFz2mYhgWw-RuQp0VucYpmSnItqt3gDMAiAaACurJZII9nGm9dCJuJ2Vv7QJ2zI8kqFF83h354Pb-Q%3D%3D/file/index.m3u8
 
 #EXTINF:-1 group-title="Malayalam" tvg-logo="https://upload.wikimedia.org/wikipedia/en/thumb/8/83/Mangalam_logo.png/200px-Mangalam_logo.png" tvg-id="", Mangalam TV
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -223,7 +223,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Travel" tvg-logo="https://yt3.googleusercontent.com/tnXIAzoWzmNPv_o8VSy1yTlheZUsfHs2zIBZv-VJK4g49PmsHDoOmVeVrTTNIVyXzCN00l_D7Q=s0" tvg-id="", Cruise1st TV
-https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1790281484/ei/rDK1auHZK9iFkucP0YSGgQE/ip/20.116.79.53/id/aTJGSuZPNpM.3/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/bui/AWzQHwpSJB-igtZb-TbOFFlhauf6LCG9aiSnKEO_YNEpd-TsnUTGDj41U7NPNMAo4FDekx_E7akzOkpb/spc/I-rgIXfqTgt67Kp06TFSi1weUfXqSxYIGkLjrs7rrVr50WtmPE6Lh1tfXQ/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52178456/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRAIgYTwQ5INr898SY1dhWxBisYa9w8IxwH1DE2XImioQUWMCIE_n4l1CTr2tK2ZTLG6JOrqmdJglOe2fw31Bs9ePo9E8/file/index.m3u8
+https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="Philippines" tvg-logo="" tvg-id="", ABS-CBN Entertainment- Kapamilya Online Live
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
@@ -355,7 +355,7 @@ https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moo
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
 
 #EXTINF:-1 group-title="English" tvg-logo="" tvg-id="", Euronews
-https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
+https://manifest.googlevideo.com/api/manifest/hls_variant/expire/1790543717/ei/BTO5aoa2AoqBkucPs47E0Qw/ip/172.203.207.243/id/pykpO5kQJ98.6/source/yt_live_broadcast/requiressl/yes/xpc/EgVo2aDSNQ%3D%3D/hfr/1/playlist_duration/3600/manifest_duration/3600/demuxed/1/maudio/1/gcr/us/bui/AWzQHwpATkDpbMmzobKomkF4r_aDxPDrp7bLXMQiby4nalq-3fawTw0daO8QStETcKVJh7ps2jiaGRYq/spc/I-rgIRugZY9NK_6LZ4XZCiINC1HhrunEK4lLJ7awZPHsqHY35J4drSuThQ/vprv/1/go/1/rqh/5/reg/0/pacing/0/nvgoi/1/short_key/1/ncsapi/1/keepalive/yes/fexp/51565115%2C52178456/dover/13/itag/0/playlist_type/DVR/sparams/expire%2Cei%2Cip%2Cid%2Csource%2Crequiressl%2Cxpc%2Chfr%2Cplaylist_duration%2Cmanifest_duration%2Cdemuxed%2Cmaudio%2Cgcr%2Cbui%2Cspc%2Cvprv%2Cgo%2Crqh%2Creg%2Citag%2Cplaylist_type/sig/AE0s2JYwRQIgI2gTAGEEtd2s6lSajNcWvpVEMYYjOtNANgmDk3K2qcgCIQDAPhmfZiNT73u8ohylSWSzI0o6VSHkkjs8BT-XxmrfBA%3D%3D/file/index.m3u8
 
 #EXTINF:-1 group-title="Entertainment" tvg-logo="" tvg-id="", SBT SC
 https://raw.githubusercontent.com/MixVIPortamento/YouTube_to_m3u/main/assets/moose_na.m3u
